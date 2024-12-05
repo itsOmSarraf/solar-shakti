@@ -3,7 +3,7 @@
 > Empowering homes with intelligent solar energy management
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png?token=GHSAT0AAAAAACZAJDMFHGVZY2LXQ6M3EKQEZ2SAHBQ" alt="Solar Shakti Logo" width="200"/>
+  <img src="https://imgur.com/a/ajD6moO" alt="Solar Shakti Logo" width="200"/>
 </div>
 
 ## About Solar Shakti
