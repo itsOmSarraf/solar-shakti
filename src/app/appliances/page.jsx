@@ -739,20 +739,34 @@ const SolarSystemPage = () => {
 					style={{ width: `${batteryPercentage}%` }}
 				/>
 			</div>
-			<div className='grid grid-cols-3 gap-2'>
+			{/* <div className='grid grid-cols-3 gap-2'>
 				{BATTERY_MODES.map((mode) => (
 					<Button
 						key={mode.value}
 						variant={batterySystem.mode === mode.value ? 'default' : 'outline'}
 						className='flex items-center justify-center gap-1 p-2'
-						onClick={() =>
-							setBatterySystem((prev) => ({ ...prev, mode: mode.value }))
-						}>
+						onClick={() => {
+							console.log('Setting mode to:', mode.value);
+							setBatterySystem((prev) => {
+								const newState = {
+									...prev,
+									mode: mode.value,
+									currentCharge:
+										mode.value === 'charging'
+											? Math.min(prev.currentCharge + 20, prev.capacity)
+											: mode.value === 'discharging'
+											? Math.max(prev.currentCharge - 20, 0)
+											: prev.currentCharge
+								};
+								console.log('New battery state:', newState);
+								return newState;
+							});
+						}}>
 						{mode.icon}
 						<span className='text-xs hidden sm:inline'>{mode.name}</span>
 					</Button>
 				))}
-			</div>
+			</div> */}
 		</Card>
 	);
 
