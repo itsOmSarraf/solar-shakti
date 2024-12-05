@@ -32,8 +32,41 @@ import {
 	Factory,
 	Timer,
 	TrendingDown,
-	Wind
+	Wind,
+	IndianRupee
 } from 'lucide-react';
+
+// Custom Tooltip Component
+const CustomTooltip = ({ active, payload, label }) => {
+	if (!active || !payload) return null;
+
+	return (
+		<div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700'>
+			<p className='font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+				{label}
+			</p>
+			{payload.map((entry, index) => (
+				<div
+					key={index}
+					className='flex items-center gap-2 text-sm'>
+					<div
+						className='w-3 h-3 rounded-full'
+						style={{ backgroundColor: entry.color }}></div>
+					<span className='text-gray-700 dark:text-gray-300'>
+						{entry.name}:
+					</span>
+					<span className='font-medium text-gray-900 dark:text-gray-100'>
+						{typeof entry.value === 'number'
+							? entry.value.toLocaleString()
+							: entry.value}
+						{entry.name.toLowerCase().includes('efficiency') ? '%' : ''}
+						{entry.name.toLowerCase().includes('cost') ? ' ₹' : ''}
+					</span>
+				</div>
+			))}
+		</div>
+	);
+};
 
 // Metric Box Component
 const MetricBox = ({ icon: Icon, label, value, trend, color, subValue }) => (
@@ -184,7 +217,7 @@ const EnergyStatisticsExpanded = () => {
 			</h1>
 
 			{/* Live Metrics Grid */}
-			<div className='mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+			<div className='mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
 				<MetricBox
 					icon={Sun}
 					label='Solar Generation'
@@ -202,7 +235,7 @@ const EnergyStatisticsExpanded = () => {
 					color='bg-green-500'
 				/>
 				<MetricBox
-					icon={DollarSign}
+					icon={IndianRupee}
 					label='Cost Savings'
 					value='₹12,458'
 					subValue='Monthly average'
@@ -219,268 +252,258 @@ const EnergyStatisticsExpanded = () => {
 				/>
 			</div>
 
-			{/* Real-time Energy Flow */}
-			<Card className=''>
-				<CardHeader>
-					<CardTitle className='text-gray-900 dark:text-gray-100'>
-						Real-time Energy Flow
-					</CardTitle>
-				</CardHeader>
-				<CardContent className='h-[400px]'>
-					<ResponsiveContainer
-						width='100%'
-						height='100%'>
-						<LineChart data={liveData}>
-							<CartesianGrid
-								strokeDasharray='3 3'
-								stroke='#e5e7eb dark:stroke-gray-700'
-							/>
-							<XAxis
-								dataKey='time'
-								stroke='#4b5563'
-							/>
-							<YAxis stroke='#4b5563' />
-							<Tooltip
-								contentStyle={{
-									backgroundColor: '#fff ',
-									border: '1px solid #e5e7eb'
-								}}
-							/>
-							<Legend />
-							<Line
-								type='monotone'
-								dataKey='solar'
-								stroke='#f59e0b'
-								name='Solar'
-								dot={false}
-							/>
-							<Line
-								type='monotone'
-								dataKey='grid'
-								stroke='#3b82f6'
-								name='Grid'
-								dot={false}
-							/>
-							<Line
-								type='monotone'
-								dataKey='consumption'
-								stroke='#ef4444'
-								name='Consumption'
-								dot={false}
-							/>
-						</LineChart>
-					</ResponsiveContainer>
-				</CardContent>
-			</Card>
+			{/* Real-time and Carbon Emissions */}
+			<ScrollArea className='w-full mb-8'>
+				<div
+					className='flex gap-4 pb-4'
+					style={{ width: '200%' }}>
+					{/* Real-time Energy Flow */}
+					<Card className='w-full'>
+						<CardHeader>
+							<CardTitle className='text-gray-900 dark:text-gray-100'>
+								Real-time Energy Flow
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='h-[400px]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<LineChart data={liveData}>
+									<CartesianGrid
+										strokeDasharray='3 3'
+										stroke='#e5e7eb dark:stroke-gray-700'
+									/>
+									<XAxis
+										dataKey='time'
+										stroke='#4b5563'
+									/>
+									<YAxis stroke='#4b5563' />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Line
+										type='monotone'
+										dataKey='solar'
+										stroke='#f59e0b'
+										name='Solar'
+										dot={false}
+									/>
+									<Line
+										type='monotone'
+										dataKey='grid'
+										stroke='#3b82f6'
+										name='Grid'
+										dot={false}
+									/>
+									<Line
+										type='monotone'
+										dataKey='consumption'
+										stroke='#ef4444'
+										name='Consumption'
+										dot={false}
+									/>
+								</LineChart>
+							</ResponsiveContainer>
+						</CardContent>
+					</Card>
 
-			{/* Carbon Emissions Impact */}
-			<Card>
-				<CardHeader>
-					<CardTitle className='text-gray-900 dark:text-white'>
-						Carbon Emissions Reduction
-					</CardTitle>
-				</CardHeader>
-				<CardContent className='h-[400px]'>
-					<ResponsiveContainer
-						width='100%'
-						height='100%'>
-						<AreaChart data={carbonData}>
-							<CartesianGrid
-								strokeDasharray='3 3'
-								stroke='#e5e7eb'
-							/>
-							<XAxis
-								dataKey='month'
-								stroke='#4b5563'
-							/>
-							<YAxis stroke='#4b5563' />
-							<Tooltip
-								contentStyle={{
-									backgroundColor: '#fff ',
-									border: '1px solid #e5e7eb '
-								}}
-							/>
-							<Legend />
-							<Area
-								type='monotone'
-								dataKey='baseline'
-								stroke='#ef4444'
-								fill='#fee2e2 '
-								name='Baseline Emissions'
-							/>
-							<Area
-								type='monotone'
-								dataKey='reduced'
-								stroke='#10b981'
-								fill='#d1fae5 '
-								name='Reduced Emissions'
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
-				</CardContent>
-			</Card>
+					{/* Carbon Emissions Impact */}
+					<Card className='w-full'>
+						<CardHeader>
+							<CardTitle className='text-gray-900 dark:text-white'>
+								Carbon Emissions Reduction
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='h-[400px]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<AreaChart data={carbonData}>
+									<CartesianGrid
+										strokeDasharray='3 3'
+										stroke='#e5e7eb'
+									/>
+									<XAxis
+										dataKey='month'
+										stroke='#4b5563'
+									/>
+									<YAxis stroke='#4b5563' />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Area
+										type='monotone'
+										dataKey='baseline'
+										stroke='#ef4444'
+										fill='#fee2e2'
+										name='Baseline Emissions'
+									/>
+									<Area
+										type='monotone'
+										dataKey='reduced'
+										stroke='#10b981'
+										fill='#d1fae5'
+										name='Reduced Emissions'
+									/>
+								</AreaChart>
+							</ResponsiveContainer>
+						</CardContent>
+					</Card>
+				</div>
+			</ScrollArea>
 
-			{/* Cost Analysis */}
-			<Card>
-				<CardHeader>
-					<CardTitle className='text-gray-900 dark:text-gray-100'>
-						Cost Comparison
-					</CardTitle>
-				</CardHeader>
-				<CardContent className='h-[400px]'>
-					<ResponsiveContainer
-						width='100%'
-						height='100%'>
-						<BarChart data={costData}>
-							<CartesianGrid
-								strokeDasharray='3 3'
-								stroke='#e5e7eb dark:stroke-gray-700'
-							/>
-							<XAxis
-								dataKey='month'
-								stroke='#4b5563'
-							/>
-							<YAxis stroke='#4b5563' />
-							<Tooltip
-								contentStyle={{
-									backgroundColor: '#fff dark:bg-gray-800',
-									border: '1px solid #e5e7eb dark:border-gray-700'
-								}}
-							/>
-							<Legend />
-							<Bar
-								dataKey='withoutSolar'
-								fill='#ef4444'
-								name='Without Solar'
-							/>
-							<Bar
-								dataKey='withSolar'
-								fill='#10b981'
-								name='With Solar'
-							/>
-						</BarChart>
-					</ResponsiveContainer>
-				</CardContent>
-			</Card>
+			{/* Cost and Weather Impact */}
+			<ScrollArea className='w-full mb-8'>
+				<div
+					className='flex gap-4 pb-4'
+					style={{ width: '200%' }}>
+					{/* Cost Analysis */}
+					<Card className='w-full'>
+						<CardHeader>
+							<CardTitle className='text-gray-900 dark:text-gray-100'>
+								Cost Comparison
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='h-[400px]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<BarChart data={costData}>
+									<CartesianGrid
+										strokeDasharray='3 3'
+										stroke='#e5e7eb dark:stroke-gray-700'
+									/>
+									<XAxis
+										dataKey='month'
+										stroke='#4b5563'
+									/>
+									<YAxis stroke='#4b5563' />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Bar
+										dataKey='withoutSolar'
+										fill='#ef4444'
+										name='Without Solar'
+									/>
+									<Bar
+										dataKey='withSolar'
+										fill='#10b981'
+										name='With Solar'
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						</CardContent>
+					</Card>
 
-			{/* Energy Source Distribution and Peak Usage */}
-			<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-				<Card>
-					<CardHeader>
-						<CardTitle className='text-gray-900 dark:text-gray-100'>
-							Energy Source Distribution
-						</CardTitle>
-					</CardHeader>
-					<CardContent className='h-[400px]'>
-						<ResponsiveContainer
-							width='100%'
-							height='100%'>
-							<PieChart>
-								<Pie
-									data={distributionData}
+					{/* Weather Impact */}
+					<Card className='w-full'>
+						<CardHeader>
+							<CardTitle className='text-gray-900 dark:text-gray-100'>
+								Weather Impact on Solar Generation
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='h-[400px]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<BarChart data={weatherImpactData}>
+									<CartesianGrid
+										strokeDasharray='3 3'
+										stroke='#e5e7eb dark:stroke-gray-700'
+									/>
+									<XAxis
+										dataKey='day'
+										stroke='#4b5563'
+									/>
+									<YAxis stroke='#4b5563' />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Bar
+										dataKey='sunny'
+										fill='#f59e0b'
+										name='Sunny'
+									/>
+									<Bar
+										dataKey='cloudy'
+										fill='#94a3b8'
+										name='Cloudy'
+									/>
+									<Bar
+										dataKey='rainy'
+										fill='#3b82f6'
+										name='Rainy'
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						</CardContent>
+					</Card>
+				</div>
+			</ScrollArea>
+
+			{/* Distribution and Peak Usage */}
+			<ScrollArea className='w-full mb-8'>
+				<div
+					className='flex gap-4 pb-4'
+					style={{ width: '200%' }}>
+					{/* Energy Source Distribution */}
+					<Card className='w-full'>
+						<CardHeader>
+							<CardTitle className='text-gray-900 dark:text-gray-100'>
+								Energy Source Distribution
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='h-[400px]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<PieChart>
+									<Pie
+										data={distributionData}
+										cx='50%'
+										cy='50%'
+										innerRadius={60}
+										outerRadius={80}
+										paddingAngle={5}
+										dataKey='value'
+									/>
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+								</PieChart>
+							</ResponsiveContainer>
+						</CardContent>
+					</Card>
+
+					{/* Peak Usage Times */}
+					<Card className='w-full'>
+						<CardHeader>
+							<CardTitle className='text-gray-900 dark:text-gray-100'>
+								Peak Usage Times
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='h-[400px]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<RadialBarChart
 									cx='50%'
 									cy='50%'
-									innerRadius={60}
-									outerRadius={80}
-									paddingAngle={5}
-									dataKey='value'
-								/>
-								<Tooltip
-									contentStyle={{
-										backgroundColor: '#fff dark:bg-gray-800',
-										border: '1px solid #e5e7eb dark:border-gray-700'
-									}}
-								/>
-								<Legend />
-							</PieChart>
-						</ResponsiveContainer>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardHeader>
-						<CardTitle className='text-gray-900 dark:text-gray-100'>
-							Peak Usage Times
-						</CardTitle>
-					</CardHeader>
-					<CardContent className='h-[400px]'>
-						<ResponsiveContainer
-							width='100%'
-							height='100%'>
-							<RadialBarChart
-								cx='50%'
-								cy='50%'
-								innerRadius='20%'
-								outerRadius='80%'
-								data={peakUsageData}
-								startAngle={180}
-								endAngle={0}>
-								<RadialBar
-									minAngle={15}
-									background
-									clockWise={true}
-									dataKey='value'
-								/>
-								<Legend />
-								<Tooltip
-									contentStyle={{
-										backgroundColor: '#fff dark:bg-gray-800',
-										border: '1px solid #e5e7eb dark:border-gray-700'
-									}}
-								/>
-							</RadialBarChart>
-						</ResponsiveContainer>
-					</CardContent>
-				</Card>
-			</div>
-
-			{/* Weather Impact */}
-			<Card>
-				<CardHeader>
-					<CardTitle className='text-gray-900 dark:text-gray-100'>
-						Weather Impact on Solar Generation
-					</CardTitle>
-				</CardHeader>
-				<CardContent className='h-[400px]'>
-					<ResponsiveContainer
-						width='100%'
-						height='100%'>
-						<BarChart data={weatherImpactData}>
-							<CartesianGrid
-								strokeDasharray='3 3'
-								stroke='#e5e7eb dark:stroke-gray-700'
-							/>
-							<XAxis
-								dataKey='day'
-								stroke='#4b5563'
-							/>
-							<YAxis stroke='#4b5563' />
-							<Tooltip
-								contentStyle={{
-									backgroundColor: '#fff dark:bg-gray-800',
-									border: '1px solid #e5e7eb dark:border-gray-700'
-								}}
-							/>
-							<Legend />
-							<Bar
-								dataKey='sunny'
-								fill='#f59e0b'
-								name='Sunny'
-							/>
-							<Bar
-								dataKey='cloudy'
-								fill='#94a3b8'
-								name='Cloudy'
-							/>
-							<Bar
-								dataKey='rainy'
-								fill='#3b82f6'
-								name='Rainy'
-							/>
-						</BarChart>
-					</ResponsiveContainer>
-				</CardContent>
-			</Card>
+									innerRadius='20%'
+									outerRadius='80%'
+									data={peakUsageData}
+									startAngle={180}
+									endAngle={0}>
+									<RadialBar
+										minAngle={15}
+										background
+										clockWise={true}
+										dataKey='value'
+									/>
+									<Legend />
+									<Tooltip content={<CustomTooltip />} />
+								</RadialBarChart>
+							</ResponsiveContainer>
+						</CardContent>
+					</Card>
+				</div>
+			</ScrollArea>
 
 			{/* System Efficiency */}
 			<Card>
@@ -503,12 +526,7 @@ const EnergyStatisticsExpanded = () => {
 								stroke='#4b5563'
 							/>
 							<YAxis stroke='#4b5563' />
-							<Tooltip
-								contentStyle={{
-									backgroundColor: '#fff',
-									border: '1px solid #e5e7eb '
-								}}
-							/>
+							<Tooltip content={<CustomTooltip />} />
 							<Area
 								type='monotone'
 								dataKey='efficiency'
