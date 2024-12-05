@@ -2,8 +2,8 @@ import { ImageResponse } from 'next/og'
 
 // Configuration for the OpenGraph image
 const OG_CONFIG = {
-    APP_NAME: 'Your App Name',
-    TAGLINE: 'Your App Tagline',
+    APP_NAME: 'SolarShakti',
+    TAGLINE: 'SolarShakti',
     COLORS: {
         gradientStart: '#000000', // Primary gradient color
         gradientEnd: '#111111',   // Secondary gradient color

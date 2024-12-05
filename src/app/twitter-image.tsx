@@ -10,7 +10,7 @@ const config = {
     },
     contentType: 'image/png',
     defaults: {
-        title: 'Your App Name',
+        title: 'SolarShakti',
         subtitle: 'Your App Tagline',
         gradientStart: '#4CAF50',
         gradientEnd: '#45a049',
