@@ -140,7 +140,9 @@ const SmartAppliancesPage = () => {
 			icon: Waves,
 			powerDraw: 1500,
 			group: 'Cooling',
-			status: 'active'
+			status: 'active',
+			temperature: 22,
+			fanSpeed: 'medium'
 		},
 		{
 			id: 2,
@@ -148,7 +150,9 @@ const SmartAppliancesPage = () => {
 			icon: Tv,
 			powerDraw: 100,
 			group: 'Entertainment',
-			status: 'idle'
+			status: 'idle',
+			volume: 50,
+			brightness: 80
 		},
 		{
 			id: 3,
@@ -156,7 +160,9 @@ const SmartAppliancesPage = () => {
 			icon: Wifi,
 			powerDraw: 20,
 			group: 'Network',
-			status: 'active'
+			status: 'active',
+			bandwidth: 100,
+			connectedDevices: 5
 		},
 		{
 			id: 4,
@@ -164,7 +170,8 @@ const SmartAppliancesPage = () => {
 			icon: Fan,
 			powerDraw: 75,
 			group: 'Cooling',
-			status: 'active'
+			status: 'active',
+			speed: 3
 		},
 		{
 			id: 5,
@@ -172,7 +179,8 @@ const SmartAppliancesPage = () => {
 			icon: Droplets,
 			powerDraw: 2000,
 			group: 'Heating',
-			status: 'idle'
+			status: 'idle',
+			temperature: 40
 		},
 		{
 			id: 6,
@@ -180,7 +188,9 @@ const SmartAppliancesPage = () => {
 			icon: Microwave,
 			powerDraw: 1200,
 			group: 'Kitchen',
-			status: 'idle'
+			status: 'idle',
+			power: 80,
+			timer: 0
 		},
 		{
 			id: 7,
@@ -188,7 +198,8 @@ const SmartAppliancesPage = () => {
 			icon: MonitorSmartphone,
 			powerDraw: 300,
 			group: 'Work',
-			status: 'active'
+			status: 'active',
+			performanceMode: 'balanced'
 		}
 	]);
 
@@ -238,6 +249,14 @@ const SmartAppliancesPage = () => {
 		acc[device.group].push(device);
 		return acc;
 	}, {});
+
+	const updateDeviceSettings = (deviceId, settings) => {
+		setDevices(
+			devices.map((device) =>
+				device.id === deviceId ? { ...device, ...settings } : device
+			)
+		);
+	};
 
 	return (
 		<div className='mb-6'>
@@ -327,7 +346,167 @@ const SmartAppliancesPage = () => {
 												</SheetTitle>
 											</SheetHeader>
 											<div className='mt-6'>
-												<h3 className='text-sm font-medium mb-2'>
+												<div className='space-y-4'>
+													<div className='flex items-center justify-between'>
+														<span>Power</span>
+														<Switch
+															checked={device.status === 'active'}
+															onCheckedChange={(checked) => {
+																updateDeviceSettings(device.id, {
+																	status: checked ? 'active' : 'idle'
+																});
+															}}
+														/>
+													</div>
+
+													{/* Device-specific controls */}
+													{device.name === 'Air Conditioner' && (
+														<>
+															<div>
+																<span className='block mb-2'>
+																	Temperature ({device.temperature}°C)
+																</span>
+																<Slider
+																	value={[device.temperature]}
+																	min={16}
+																	max={30}
+																	step={1}
+																	onValueChange={([value]) => {
+																		updateDeviceSettings(device.id, {
+																			temperature: value
+																		});
+																	}}
+																/>
+															</div>
+															<div>
+																<span className='block mb-2'>Fan Speed</span>
+																<div className='flex gap-2'>
+																	{['low', 'medium', 'high'].map((speed) => (
+																		<Button
+																			key={speed}
+																			variant={
+																				device.fanSpeed === speed
+																					? 'default'
+																					: 'outline'
+																			}
+																			onClick={() =>
+																				updateDeviceSettings(device.id, {
+																					fanSpeed: speed
+																				})
+																			}>
+																			{speed}
+																		</Button>
+																	))}
+																</div>
+															</div>
+														</>
+													)}
+
+													{device.name === 'Smart TV' && (
+														<>
+															<div>
+																<span className='block mb-2'>
+																	Volume ({device.volume}%)
+																</span>
+																<Slider
+																	value={[device.volume]}
+																	min={0}
+																	max={100}
+																	step={1}
+																	onValueChange={([value]) => {
+																		updateDeviceSettings(device.id, {
+																			volume: value
+																		});
+																	}}
+																/>
+															</div>
+															<div>
+																<span className='block mb-2'>
+																	Brightness ({device.brightness}%)
+																</span>
+																<Slider
+																	value={[device.brightness]}
+																	min={0}
+																	max={100}
+																	step={1}
+																	onValueChange={([value]) => {
+																		updateDeviceSettings(device.id, {
+																			brightness: value
+																		});
+																	}}
+																/>
+															</div>
+														</>
+													)}
+
+													{device.name === 'Ceiling Fan' && (
+														<div>
+															<span className='block mb-2'>
+																Fan Speed ({device.speed})
+															</span>
+															<Slider
+																value={[device.speed]}
+																min={1}
+																max={5}
+																step={1}
+																onValueChange={([value]) => {
+																	updateDeviceSettings(device.id, {
+																		speed: value
+																	});
+																}}
+															/>
+														</div>
+													)}
+
+													{device.name === 'Water Heater' && (
+														<div>
+															<span className='block mb-2'>
+																Temperature ({device.temperature}°C)
+															</span>
+															<Slider
+																value={[device.temperature]}
+																min={30}
+																max={60}
+																step={1}
+																onValueChange={([value]) => {
+																	updateDeviceSettings(device.id, {
+																		temperature: value
+																	});
+																}}
+															/>
+														</div>
+													)}
+
+													{device.name === 'Computer' && (
+														<div>
+															<span className='block mb-2'>
+																Performance Mode
+															</span>
+															<div className='flex gap-2'>
+																{['power-saver', 'balanced', 'performance'].map(
+																	(mode) => (
+																		<Button
+																			key={mode}
+																			variant={
+																				device.performanceMode === mode
+																					? 'default'
+																					: 'outline'
+																			}
+																			onClick={() =>
+																				updateDeviceSettings(device.id, {
+																					performanceMode: mode
+																				})
+																			}>
+																			{mode}
+																		</Button>
+																	)
+																)}
+															</div>
+														</div>
+													)}
+												</div>
+
+												<h3 className='text-sm font-medium mb-2 mt-4'>
 													Energy Usage - Past 24 Hours
 												</h3>
 												<div className='h-64'>
@@ -367,20 +546,6 @@ const SmartAppliancesPage = () => {
 																{device.powerDraw}W
 															</span>
 														</div>
-														<Switch
-															checked={device.status === 'active'}
-															onCheckedChange={(checked) => {
-																const updatedDevices = devices.map((d) =>
-																	d.id === device.id
-																		? {
-																				...d,
-																				status: checked ? 'active' : 'idle'
-																		  }
-																		: d
-																);
-																setDevices(updatedDevices);
-															}}
-														/>
 													</div>
 													{activeSchedule && (
 														<p className='text-sm text-gray-500 mt-2'>
@@ -516,11 +681,33 @@ const SolarSystemPage = () => {
 		<Card className='p-4'>
 			<div className='flex items-center justify-between mb-4'>
 				<h3 className='text-lg font-semibold'>Battery Status</h3>
-				<Badge variant={batteryPercentage > 50 ? 'default' : 'destructive'}>
+				<Badge
+					variant={batteryPercentage > 50 ? 'default' : 'destructive'}
+					className='cursor-pointer'
+					onClick={() =>
+						setBatterySystem((prev) => ({
+							...prev,
+							currentCharge:
+								prev.currentCharge + 10 > prev.capacity
+									? prev.capacity
+									: prev.currentCharge + 10
+						}))
+					}>
 					{batteryPercentage.toFixed(1)}%
 				</Badge>
 			</div>
-			<div className='w-full bg-gray-200 rounded-full h-4 mb-4'>
+			<div
+				className='w-full bg-gray-200 rounded-full h-4 mb-4 cursor-pointer'
+				onClick={(e) => {
+					const rect = e.currentTarget.getBoundingClientRect();
+					const x = e.clientX - rect.left;
+					const percentage = (x / rect.width) * 100;
+					const newCharge = (percentage / 100) * batterySystem.capacity;
+					setBatterySystem((prev) => ({
+						...prev,
+						currentCharge: Math.min(Math.max(newCharge, 0), prev.capacity)
+					}));
+				}}>
 				<div
 					className='bg-green-500 rounded-full h-4 transition-all duration-500'
 					style={{ width: `${batteryPercentage}%` }}
@@ -533,7 +720,7 @@ const SolarSystemPage = () => {
 						variant={batterySystem.mode === mode.value ? 'default' : 'outline'}
 						className='flex items-center justify-center gap-1 p-2'
 						onClick={() =>
-							setBatterySystem({ ...batterySystem, mode: mode.value })
+							setBatterySystem((prev) => ({ ...prev, mode: mode.value }))
 						}>
 						{mode.icon}
 						<span className='text-xs hidden sm:inline'>{mode.name}</span>

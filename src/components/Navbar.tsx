@@ -21,11 +21,13 @@ export function Navbar() {
     return (
         <nav
             className={`
-                sticky top-0 z-50 
+                sticky top-0
                 transition-all duration-300 
+                bg-white
+                z-50
                 ${isScrolled
-                    ? 'bg-white/80 backdrop-blur-md shadow-sm dark:bg-gray-900/80'
-                    : 'bg-white dark:bg-gray-900'
+                    ? 'bg-white'
+                    : 'bg-white'
                 }
             `}
         >

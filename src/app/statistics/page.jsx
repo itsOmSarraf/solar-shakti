@@ -36,6 +36,7 @@ const PageSkeleton = () => (
 
 export default function EnergyDashboard() {
 	const [isLoading, setIsLoading] = useState(false);
+	const [activeTab, setActiveTab] = useState('statistics');
 
 	const systemStatus = {
 		status: 'optimal',
@@ -45,13 +46,14 @@ export default function EnergyDashboard() {
 
 	const handleTabChange = (value) => {
 		setIsLoading(true);
+		setActiveTab(value);
 		setTimeout(() => setIsLoading(false), 500);
 	};
 
 	return (
-		<div className='min-h-screen bg-gray-50/50'>
+		<div className='bg-gray-50/50'>
 			{/* Header Section */}
-			<div className='sticky top-0 z-50 bg-white border-b'>
+			<div className='bg-white border-b'>
 				<div className='px-3 py-2'>
 					<div className='flex flex-col sm:flex-row justify-between gap-2 items-start sm:items-center max-w-[1800px] mx-auto'>
 						{/* Left side */}
@@ -92,58 +94,80 @@ export default function EnergyDashboard() {
 				</div>
 
 				{/* Tabs Navigation and Content */}
-				<div className='bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60'>
-					<div className='max-w-[1800px] mx-auto px-3'>
-						<Tabs
-							defaultValue='statistics'
-							className='w-full'
-							onValueChange={handleTabChange}>
-							<TabsList className='w-full h-12 justify-start bg-transparent'>
-								<TabsTrigger
-									value='statistics'
-									className='relative flex items-center gap-1.5 px-4 py-2 transition-all data-[state=active]:text-green-600'>
-									<BarChart2 className='w-4 h-4' />
-									<span className='text-sm font-medium'>Statistics</span>
-									<div className='absolute -bottom-px left-0 right-0 h-0.5 bg-green-600 data-[state=inactive]:opacity-0' />
-								</TabsTrigger>
-								<TabsTrigger
-									value='predictions'
-									className='relative flex items-center gap-1.5 px-4 py-2 transition-all data-[state=active]:text-blue-600'>
-									<BrainCircuit className='w-4 h-4' />
-									<span className='text-sm font-medium'>AI Predictions</span>
-									<div className='absolute -bottom-px left-0 right-0 h-0.5 bg-blue-600 data-[state=inactive]:opacity-0' />
-									<Badge
-										variant='secondary'
-										className='ml-1.5 bg-blue-50 text-blue-700 px-1.5 py-0.5 text-xs'>
-										AI
-									</Badge>
-								</TabsTrigger>
-							</TabsList>
+				{/* <div className='w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60'> */}
+				<div className='w-full flex mx-auto px-3'>
+					<Tabs
+						defaultValue='statistics'
+						className='w-full'
+						onValueChange={handleTabChange}>
+						<TabsList className='w-full flex h-12 justify-between bg-transparent'>
+							<TabsTrigger
+								value='statistics'
+								className={`relative flex items-center gap-1.5 px-4 py-2 transition-all ${
+									activeTab === 'statistics'
+										? 'text-green-600'
+										: 'text-gray-500'
+								}`}>
+								<BarChart2 className='w-4 h-4' />
+								<span className='text-sm font-medium'>Statistics</span>
+								<div
+									className={`absolute -bottom-px left-0 right-0 h-0.5 ${
+										activeTab === 'statistics' ? 'bg-green-600' : 'hidden'
+									}`}
+								/>
+							</TabsTrigger>
+							<TabsTrigger
+								value='predictions'
+								className={`relative flex items-center gap-1.5 px-4 py-2 transition-all ${
+									activeTab === 'predictions'
+										? 'text-blue-600'
+										: 'text-gray-500'
+								}`}>
+								<BrainCircuit className='w-4 h-4' />
+								<span className='text-sm font-medium'>AI Predictions</span>
+								<div
+									className={`absolute -bottom-px left-0 right-0 h-0.5 ${
+										activeTab === 'predictions' ? 'bg-blue-600' : 'hidden'
+									}`}
+								/>
+								<Badge
+									variant='secondary'
+									className='ml-1.5 bg-blue-50 text-blue-700 px-1.5 py-0.5 text-xs'>
+									AI
+								</Badge>
+							</TabsTrigger>
+						</TabsList>
 
-							{/* Main Content */}
-							<main className='max-w-[1800px] mx-auto'>
-								<Suspense fallback={<PageSkeleton />}>
-									{isLoading ? (
-										<PageSkeleton />
-									) : (
-										<div className='px-3 py-4'>
-											<TabsContent
-												value='statistics'
-												className='mt-0 animate-in fade-in-50 slide-in-from-left-1/4'>
-												<StatisticsPage />
-											</TabsContent>
+						{/* Main Content */}
+						<main className='max-w-[1800px] mx-auto'>
+							<Suspense fallback={<PageSkeleton />}>
+								{isLoading ? (
+									<PageSkeleton />
+								) : (
+									<div className='px-3 py-4'>
+										<TabsContent
+											value='statistics'
+											className={`mt-0 animate-in fade-in-50 slide-in-from-left-1/4 ${
+												activeTab === 'statistics' ? 'opacity-100' : 'opacity-0'
+											}`}>
+											<StatisticsPage />
+										</TabsContent>
 
-											<TabsContent
-												value='predictions'
-												className='mt-0 animate-in fade-in-50 slide-in-from-right-1/4'>
-												<PredictionsPage />
-											</TabsContent>
-										</div>
-									)}
-								</Suspense>
-							</main>
-						</Tabs>
-					</div>
+										<TabsContent
+											value='predictions'
+											className={`mt-0 animate-in fade-in-50 slide-in-from-right-1/4 ${
+												activeTab === 'predictions'
+													? 'opacity-100'
+													: 'opacity-0'
+											}`}>
+											<PredictionsPage />
+										</TabsContent>
+									</div>
+								)}
+							</Suspense>
+						</main>
+					</Tabs>
+					{/* </div> */}
 				</div>
 			</div>
 		</div>

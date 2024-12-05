@@ -170,270 +170,270 @@ const EnergyStatisticsExpanded = () => {
 	}, []);
 
 	return (
-		<ScrollArea className='h-screen'>
-			<div className='p-4 space-y-6'>
-				<h1 className='text-2xl font-bold mb-6'>Energy Analytics Dashboard</h1>
+		// <ScrollArea className='z-10'>
+		<div className='z-10'>
+			<h1 className='text-2xl font-bold mb-6'>Energy Analytics Dashboard</h1>
 
-				{/* Live Metrics Grid */}
-				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
-					<MetricBox
-						icon={Sun}
-						label='Solar Generation'
-						value='4.2 kW'
-						subValue='Peak: 5.1 kW at 13:00'
-						trend={12}
-						color='bg-amber-500'
-					/>
-					<MetricBox
-						icon={Leaf}
-						label='Carbon Reduced'
-						value='2.8 tons'
-						subValue='This month'
-						trend={15}
-						color='bg-green-500'
-					/>
-					<MetricBox
-						icon={DollarSign}
-						label='Cost Savings'
-						value='₹12,458'
-						subValue='Monthly average'
-						trend={8}
-						color='bg-purple-500'
-					/>
-					<MetricBox
-						icon={Battery}
-						label='Battery Status'
-						value='85%'
-						subValue='4.2 kWh available'
-						trend={5}
-						color='bg-blue-500'
-					/>
-				</div>
+			{/* Live Metrics Grid */}
+			<div className='mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+				<MetricBox
+					icon={Sun}
+					label='Solar Generation'
+					value='4.2 kW'
+					subValue='Peak: 5.1 kW at 13:00'
+					trend={12}
+					color='bg-amber-500'
+				/>
+				<MetricBox
+					icon={Leaf}
+					label='Carbon Reduced'
+					value='2.8 tons'
+					subValue='This month'
+					trend={15}
+					color='bg-green-500'
+				/>
+				<MetricBox
+					icon={DollarSign}
+					label='Cost Savings'
+					value='₹12,458'
+					subValue='Monthly average'
+					trend={8}
+					color='bg-purple-500'
+				/>
+				<MetricBox
+					icon={Battery}
+					label='Battery Status'
+					value='85%'
+					subValue='4.2 kWh available'
+					trend={5}
+					color='bg-blue-500'
+				/>
+			</div>
 
-				{/* Real-time Energy Flow */}
+			{/* Real-time Energy Flow */}
+			<Card className=''>
+				<CardHeader>
+					<CardTitle>Real-time Energy Flow</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<LineChart data={liveData}>
+							<CartesianGrid strokeDasharray='3 3' />
+							<XAxis dataKey='time' />
+							<YAxis />
+							<Tooltip />
+							<Legend />
+							<Line
+								type='monotone'
+								dataKey='solar'
+								stroke='#f59e0b'
+								name='Solar'
+								dot={false}
+							/>
+							<Line
+								type='monotone'
+								dataKey='grid'
+								stroke='#3b82f6'
+								name='Grid'
+								dot={false}
+							/>
+							<Line
+								type='monotone'
+								dataKey='consumption'
+								stroke='#ef4444'
+								name='Consumption'
+								dot={false}
+							/>
+						</LineChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{/* Carbon Emissions Impact */}
+			<Card>
+				<CardHeader>
+					<CardTitle>Carbon Emissions Reduction</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<AreaChart data={carbonData}>
+							<CartesianGrid strokeDasharray='3 3' />
+							<XAxis dataKey='month' />
+							<YAxis />
+							<Tooltip />
+							<Legend />
+							<Area
+								type='monotone'
+								dataKey='baseline'
+								stroke='#ef4444'
+								fill='#fca5a5'
+								name='Baseline Emissions'
+							/>
+							<Area
+								type='monotone'
+								dataKey='reduced'
+								stroke='#10b981'
+								fill='#6ee7b7'
+								name='Reduced Emissions'
+							/>
+						</AreaChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{/* Cost Analysis */}
+			<Card>
+				<CardHeader>
+					<CardTitle>Cost Comparison</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<BarChart data={costData}>
+							<CartesianGrid strokeDasharray='3 3' />
+							<XAxis dataKey='month' />
+							<YAxis />
+							<Tooltip />
+							<Legend />
+							<Bar
+								dataKey='withoutSolar'
+								fill='#ef4444'
+								name='Without Solar'
+							/>
+							<Bar
+								dataKey='withSolar'
+								fill='#10b981'
+								name='With Solar'
+							/>
+						</BarChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{/* Energy Source Distribution and Peak Usage */}
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 				<Card>
 					<CardHeader>
-						<CardTitle>Real-time Energy Flow</CardTitle>
+						<CardTitle>Energy Source Distribution</CardTitle>
 					</CardHeader>
 					<CardContent className='h-[400px]'>
 						<ResponsiveContainer
 							width='100%'
 							height='100%'>
-							<LineChart data={liveData}>
-								<CartesianGrid strokeDasharray='3 3' />
-								<XAxis dataKey='time' />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Line
-									type='monotone'
-									dataKey='solar'
-									stroke='#f59e0b'
-									name='Solar'
-									dot={false}
-								/>
-								<Line
-									type='monotone'
-									dataKey='grid'
-									stroke='#3b82f6'
-									name='Grid'
-									dot={false}
-								/>
-								<Line
-									type='monotone'
-									dataKey='consumption'
-									stroke='#ef4444'
-									name='Consumption'
-									dot={false}
-								/>
-							</LineChart>
-						</ResponsiveContainer>
-					</CardContent>
-				</Card>
-
-				{/* Carbon Emissions Impact */}
-				<Card>
-					<CardHeader>
-						<CardTitle>Carbon Emissions Reduction</CardTitle>
-					</CardHeader>
-					<CardContent className='h-[400px]'>
-						<ResponsiveContainer
-							width='100%'
-							height='100%'>
-							<AreaChart data={carbonData}>
-								<CartesianGrid strokeDasharray='3 3' />
-								<XAxis dataKey='month' />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Area
-									type='monotone'
-									dataKey='baseline'
-									stroke='#ef4444'
-									fill='#fca5a5'
-									name='Baseline Emissions'
-								/>
-								<Area
-									type='monotone'
-									dataKey='reduced'
-									stroke='#10b981'
-									fill='#6ee7b7'
-									name='Reduced Emissions'
-								/>
-							</AreaChart>
-						</ResponsiveContainer>
-					</CardContent>
-				</Card>
-
-				{/* Cost Analysis */}
-				<Card>
-					<CardHeader>
-						<CardTitle>Cost Comparison</CardTitle>
-					</CardHeader>
-					<CardContent className='h-[400px]'>
-						<ResponsiveContainer
-							width='100%'
-							height='100%'>
-							<BarChart data={costData}>
-								<CartesianGrid strokeDasharray='3 3' />
-								<XAxis dataKey='month' />
-								<YAxis />
-								<Tooltip />
-								<Legend />
-								<Bar
-									dataKey='withoutSolar'
-									fill='#ef4444'
-									name='Without Solar'
-								/>
-								<Bar
-									dataKey='withSolar'
-									fill='#10b981'
-									name='With Solar'
-								/>
-							</BarChart>
-						</ResponsiveContainer>
-					</CardContent>
-				</Card>
-
-				{/* Energy Source Distribution and Peak Usage */}
-				<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-					<Card>
-						<CardHeader>
-							<CardTitle>Energy Source Distribution</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<PieChart>
-									<Pie
-										data={distributionData}
-										cx='50%'
-										cy='50%'
-										innerRadius={60}
-										outerRadius={80}
-										paddingAngle={5}
-										dataKey='value'
-									/>
-									<Tooltip />
-									<Legend />
-								</PieChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader>
-							<CardTitle>Peak Usage Times</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<RadialBarChart
+							<PieChart>
+								<Pie
+									data={distributionData}
 									cx='50%'
 									cy='50%'
-									innerRadius='20%'
-									outerRadius='80%'
-									data={peakUsageData}
-									startAngle={180}
-									endAngle={0}>
-									<RadialBar
-										minAngle={15}
-										background
-										clockWise={true}
-										dataKey='value'
-									/>
-									<Legend />
-									<Tooltip />
-								</RadialBarChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
-				</div>
-
-				{/* Weather Impact */}
-				<Card>
-					<CardHeader>
-						<CardTitle>Weather Impact on Solar Generation</CardTitle>
-					</CardHeader>
-					<CardContent className='h-[400px]'>
-						<ResponsiveContainer
-							width='100%'
-							height='100%'>
-							<BarChart data={weatherImpactData}>
-								<CartesianGrid strokeDasharray='3 3' />
-								<XAxis dataKey='day' />
-								<YAxis />
+									innerRadius={60}
+									outerRadius={80}
+									paddingAngle={5}
+									dataKey='value'
+								/>
 								<Tooltip />
 								<Legend />
-								<Bar
-									dataKey='sunny'
-									fill='#f59e0b'
-									name='Sunny'
-								/>
-								<Bar
-									dataKey='cloudy'
-									fill='#94a3b8'
-									name='Cloudy'
-								/>
-								<Bar
-									dataKey='rainy'
-									fill='#3b82f6'
-									name='Rainy'
-								/>
-							</BarChart>
+							</PieChart>
 						</ResponsiveContainer>
 					</CardContent>
 				</Card>
 
-				{/* System Efficiency */}
 				<Card>
 					<CardHeader>
-						<CardTitle>24-Hour System Efficiency</CardTitle>
+						<CardTitle>Peak Usage Times</CardTitle>
 					</CardHeader>
 					<CardContent className='h-[400px]'>
 						<ResponsiveContainer
 							width='100%'
 							height='100%'>
-							<AreaChart data={efficiencyData}>
-								<CartesianGrid strokeDasharray='3 3' />
-								<XAxis dataKey='hour' />
-								<YAxis />
-								<Tooltip />
-								<Area
-									type='monotone'
-									dataKey='efficiency'
-									stroke='#10b981'
-									fill='#6ee7b7'
-									name='Efficiency %'
+							<RadialBarChart
+								cx='50%'
+								cy='50%'
+								innerRadius='20%'
+								outerRadius='80%'
+								data={peakUsageData}
+								startAngle={180}
+								endAngle={0}>
+								<RadialBar
+									minAngle={15}
+									background
+									clockWise={true}
+									dataKey='value'
 								/>
-							</AreaChart>
+								<Legend />
+								<Tooltip />
+							</RadialBarChart>
 						</ResponsiveContainer>
 					</CardContent>
 				</Card>
 			</div>
-		</ScrollArea>
+
+			{/* Weather Impact */}
+			<Card>
+				<CardHeader>
+					<CardTitle>Weather Impact on Solar Generation</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<BarChart data={weatherImpactData}>
+							<CartesianGrid strokeDasharray='3 3' />
+							<XAxis dataKey='day' />
+							<YAxis />
+							<Tooltip />
+							<Legend />
+							<Bar
+								dataKey='sunny'
+								fill='#f59e0b'
+								name='Sunny'
+							/>
+							<Bar
+								dataKey='cloudy'
+								fill='#94a3b8'
+								name='Cloudy'
+							/>
+							<Bar
+								dataKey='rainy'
+								fill='#3b82f6'
+								name='Rainy'
+							/>
+						</BarChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{/* System Efficiency */}
+			<Card>
+				<CardHeader>
+					<CardTitle>24-Hour System Efficiency</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<AreaChart data={efficiencyData}>
+							<CartesianGrid strokeDasharray='3 3' />
+							<XAxis dataKey='hour' />
+							<YAxis />
+							<Tooltip />
+							<Area
+								type='monotone'
+								dataKey='efficiency'
+								stroke='#10b981'
+								fill='#6ee7b7'
+								name='Efficiency %'
+							/>
+						</AreaChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+		</div>
+		// </ScrollArea>
 	);
 };
 
