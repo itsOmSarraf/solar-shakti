@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { APP_NAME } from '@/lib/constants'
 import { WeatherWidget } from "./WeatherWidget"
+import Logo from "@/public/opengraph-image.png"
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -37,7 +38,7 @@ export function Navbar() {
                     className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                 >
                     <Image
-                        src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png?token=GHSAT0AAAAAACZAJDMFHGVZY2LXQ6M3EKQEZ2SAHBQ"
+                        src={Logo}
                         alt={APP_NAME}
                         className="size-8 rounded-lg"
                         priority
