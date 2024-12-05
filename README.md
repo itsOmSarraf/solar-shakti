@@ -2,7 +2,9 @@
 
 > Empowering homes with intelligent solar energy management
 
-![Solar Shakti Logo](solarpanel.png)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png?token=GHSAT0AAAAAACZAJDMFHGVZY2LXQ6M3EKQEZ2SAHBQ" alt="Solar Shakti Logo" width="200"/>
+</div>
 
 ## About Solar Shakti
 
@@ -77,13 +79,12 @@ Solar Shakti helps users:
 ## 👥 Team
 
 Made with ❤️ by BeanBagCoders:
-- Om Sarraf - FullSnack Coder
-- Naman - Trader who Codes
-- Kartikey - UI Curator
+- [Om Sarraf](https://github.com/itsOmSarraf) - FullSnack Coder
+- [Naman](https://github.com/naman-makkar) - Trader who Codes
+- [Kartikey](https://github.com/kkartikeysetia) - UI Curator
 
 ## 🔗 Links
-
-- [Live Demo]([https://demo.solarshakti.com](https://solar-shakti.vercel.app/))
+- [Live Demo](https://solar-shakti.vercel.app/)
 - [Download App](#)
 - [Documentation](#)
 
