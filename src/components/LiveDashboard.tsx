@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Battery, Home, Sun, Zap } from "lucide-react";
 
@@ -12,6 +12,7 @@ interface MetricBoxProps {
     iconColor?: string;
     hoverIconColor?: string;
     additionalClass?: string;
+    onClick?: () => void;
 }
 
 const MetricBox: React.FC<MetricBoxProps> = ({
@@ -23,10 +24,11 @@ const MetricBox: React.FC<MetricBoxProps> = ({
     iconColor = "text-gray-600 dark:text-gray-400",
     hoverIconColor = "text-green-500",
     additionalClass = "",
+    onClick
 }) => {
     return (
-        <div className={`w-full ${additionalClass}`}>
-            <Card className={`group h-full ${isHighlighted ? 'border-2 border-green-500 dark:border-green-600 relative' : ''}`}>
+        <div className={`w-full ${additionalClass}`} onClick={onClick}>
+            <Card className={`group h-full cursor-pointer ${isHighlighted ? 'border-2 border-green-500 dark:border-green-600 relative' : ''}`}>
                 {isHighlighted && (
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-green-300 to-green-400 dark:from-green-600 dark:to-green-700 rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000"></div>
                 )}
@@ -82,50 +84,100 @@ const ConnectionLine: React.FC<ConnectionLineProps> = ({ from, to, animated = fa
 };
 
 export function SolarDashboard() {
-    const metrics = [
-        {
-            position: "top",
-            icon: Sun,
-            label: "Solar Power",
-            value: "1.073 kW",
-            isHighlighted: true,
-            iconColor: "text-yellow-500 dark:text-yellow-400",
-            additionalClass: "solar-power-metric",
-        },
-        {
-            position: "left",
-            icon: Zap,
-            label: "Grid",
-            value: "233.3 V",
-            isHighlighted: false,
-            hoverIconColor: "text-yellow-500 dark:text-yellow-400",
-            additionalClass: "grid-metric mt-5",
-        },
-        {
-            position: "right",
-            icon: Home,
-            label: "Home",
-            value: "0.55 kW",
-            isHighlighted: false,
-            hoverIconColor: "text-blue-500 dark:text-blue-400",
-            additionalClass: "home-metric mt-5",
-        },
-        {
-            position: "bottom",
-            icon: Battery,
-            label: "Charged",
-            isHighlighted: false,
-            subValue: "charged",
-            additionalClass: "charged-metric mt-5",
+    const [powerSource, setPowerSource] = useState<'solar' | 'grid'>('solar');
+
+    const getMetrics = () => {
+        if (powerSource === 'solar') {
+            return [
+                {
+                    position: "top",
+                    icon: Sun,
+                    label: "Solar Power",
+                    value: "1.073 kW",
+                    isHighlighted: true,
+                    iconColor: "text-yellow-500 dark:text-yellow-400",
+                    additionalClass: "solar-power-metric",
+                    onClick: () => setPowerSource('solar')
+                },
+                {
+                    position: "left",
+                    icon: Zap,
+                    label: "Grid",
+                    value: "0.0 V",
+                    isHighlighted: false,
+                    hoverIconColor: "text-blue-500 dark:text-blue-400",
+                    additionalClass: "grid-metric mt-5",
+                    onClick: () => setPowerSource('grid')
+                },
+                {
+                    position: "right",
+                    icon: Home,
+                    label: "Home",
+                    value: "0.55 kW",
+                    isHighlighted: false,
+                    hoverIconColor: "text-blue-500 dark:text-blue-400",
+                    additionalClass: "home-metric mt-5"
+                },
+                {
+                    position: "bottom",
+                    icon: Battery,
+                    label: "Battery",
+                    isHighlighted: false,
+                    subValue: "Charging from Solar",
+                    additionalClass: "charged-metric mt-5"
+                }
+            ];
+        } else {
+            return [
+                {
+                    position: "top",
+                    icon: Sun,
+                    label: "Solar Power",
+                    value: "0.2 kW",
+                    isHighlighted: false,
+                    iconColor: "text-yellow-500 dark:text-yellow-400",
+                    additionalClass: "solar-power-metric",
+                    onClick: () => setPowerSource('solar')
+                },
+                {
+                    position: "left",
+                    icon: Zap,
+                    label: "Grid",
+                    value: "233.3 V",
+                    isHighlighted: true,
+                    hoverIconColor: "text-blue-500 dark:text-blue-400",
+                    additionalClass: "grid-metric mt-5",
+                    onClick: () => setPowerSource('grid')
+                },
+                {
+                    position: "right",
+                    icon: Home,
+                    label: "Home",
+                    value: "0.55 kW",
+                    isHighlighted: false,
+                    hoverIconColor: "text-blue-500 dark:text-blue-400",
+                    additionalClass: "home-metric mt-5"
+                },
+                {
+                    position: "bottom",
+                    icon: Battery,
+                    label: "Battery",
+                    isHighlighted: false,
+                    subValue: "Charging from Solar Only",
+                    additionalClass: "charged-metric mt-5"
+                }
+            ];
         }
-    ];
+    };
+
+    const metrics = getMetrics();
 
     return (
         <div className="p-2 md:p-6 w-full max-w-2xl mx-auto">
             <Card className="bg-white dark:bg-gray-950">
                 <CardHeader className="p-3 md:p-6">
                     <CardTitle className="text-lg md:text-2xl font-semibold text-center text-gray-900 dark:text-gray-100">
-                        Solar Power Monitor
+                        Solar Power Monitor ({powerSource === 'solar' ? 'Solar Mode' : 'Grid Mode'})
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-2 md:p-4">
@@ -135,7 +187,10 @@ export function SolarDashboard() {
                             <div className="relative">
                                 <div className="absolute -inset-1 bg-green-500 dark:bg-green-600 rounded-full animate-pulse opacity-75"></div>
                                 <div className="w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 rounded-full bg-green-500 dark:bg-green-600 flex items-center justify-center relative z-10">
-                                    <Zap className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-white animate-bounce" />
+                                    {powerSource === 'solar' ?
+                                        <Sun className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-white animate-bounce" /> :
+                                        <Zap className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-white animate-bounce" />
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -164,7 +219,7 @@ export function SolarDashboard() {
                                 <ConnectionLine
                                     from={{ x: "50%", y: "25%" }}
                                     to={{ x: "50%", y: "42%" }}
-                                    animated={true}
+                                    animated={powerSource === 'solar'}
                                 />
                                 <ConnectionLine
                                     from={{ x: "50%", y: "58%" }}
@@ -174,7 +229,7 @@ export function SolarDashboard() {
                                 <ConnectionLine
                                     from={{ x: "25%", y: "50%" }}
                                     to={{ x: "42%", y: "50%" }}
-                                    animated={false}
+                                    animated={powerSource === 'grid'}
                                 />
                                 <ConnectionLine
                                     from={{ x: "58%", y: "50%" }}
