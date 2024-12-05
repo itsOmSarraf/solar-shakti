@@ -49,7 +49,7 @@ import {
 	CloudSun,
 	CircuitBoard
 } from 'lucide-react';
-import { GiSolarPower } from 'react-icons/gi';
+import { MdOutlineSolarPower } from 'react-icons/md';
 // Predefined smart schedules
 const schedules = {
 	ecoSaver: {
@@ -686,7 +686,7 @@ const SolarSystemPage = () => {
 							: 'bg-gray-300 dark:bg-gray-600'
 					}`}>
 					<div className='w-full h-full flex items-center justify-center'>
-						<GiSolarPower
+						<MdOutlineSolarPower
 							className={`w-6 h-6 ${
 								active
 									? 'text-yellow-600 dark:text-yellow-200'
