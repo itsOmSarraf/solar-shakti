@@ -709,33 +709,13 @@ const SolarSystemPage = () => {
 				</h3>
 				<Badge
 					variant={batteryPercentage > 50 ? 'default' : 'destructive'}
-					className='cursor-pointer'
-					onClick={() =>
-						setBatterySystem((prev) => ({
-							...prev,
-							currentCharge:
-								prev.currentCharge + 10 > prev.capacity
-									? prev.capacity
-									: prev.currentCharge + 10
-						}))
-					}>
+					className='animate-pulse'>
 					{batteryPercentage.toFixed(1)}%
 				</Badge>
 			</div>
-			<div
-				className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4 cursor-pointer'
-				onClick={(e) => {
-					const rect = e.currentTarget.getBoundingClientRect();
-					const x = e.clientX - rect.left;
-					const percentage = (x / rect.width) * 100;
-					const newCharge = (percentage / 100) * batterySystem.capacity;
-					setBatterySystem((prev) => ({
-						...prev,
-						currentCharge: Math.min(Math.max(newCharge, 0), prev.capacity)
-					}));
-				}}>
+			<div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4'>
 				<div
-					className='bg-green-500 dark:bg-green-400 rounded-full h-4 transition-all duration-500'
+					className='bg-green-500 dark:bg-green-400 rounded-full h-4 transition-all duration-500 animate-pulse'
 					style={{ width: `${batteryPercentage}%` }}
 				/>
 			</div>
