@@ -1,7 +1,7 @@
 # Solar Shakti
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png?token=GHSAT0AAAAAACZAJDMFHGVZY2LXQ6M3EKQEZ2SAHBQ" alt="Solar Shakti Logo" width="150"/>
+  <img src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png" alt="Solar Shakti Logo" width="150"/>
   
   **Empowering Homes with Smart Solar Energy Management**
   
