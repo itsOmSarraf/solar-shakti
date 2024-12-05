@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Solar Shakti ☀️
 
-## Getting Started
+Empowering homes with intelligent solar energy management
 
-First, run the development server:
+Show Image
+About Solar Shakti
+Solar Shakti is a revolutionary smart energy management platform that helps households and businesses maximize their solar energy investment. By intelligently managing energy consumption patterns and integrating with Time-of-Day (ToD) and Time-of-Use (ToU) electricity tariffs, we help users save money while contributing to a sustainable future.
+🌟 Key Features
+⚡ Smart Energy Optimization
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Real-time monitoring of energy consumption and solar production
+Automated energy usage optimization based on electricity tariffs
+Intelligent scheduling of high-power appliances during low-cost periods
+Seamless integration with smart home devices
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📊 Real-time Dashboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Intuitive visualization of energy production and consumption
+Comprehensive analytics and savings insights
+Easy-to-understand metrics and performance indicators
+Track your carbon footprint reduction
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+💰 Cost Savings
 
-## Learn More
+Automatic shifting of energy consumption to low-tariff periods
+Strategic use of stored solar energy during peak pricing
+Opportunities to sell excess energy back to the grid
+Detailed cost-benefit analysis and savings reports
 
-To learn more about Next.js, take a look at the following resources:
+🤖 AI-Powered Intelligence
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Machine learning algorithms for consumption pattern analysis
+Personalized recommendations for optimal energy usage
+Weather-aware solar production forecasting
+Smart scheduling based on historical data and user preferences
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+📱 Seamless User Experience
 
-## Deploy on Vercel
+User-friendly mobile app interface
+Real-time alerts and notifications
+WhatsApp integration for daily reports and updates
+Automated appliance scheduling with manual override options
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🎯 Problem We're Solving
+Traditional solar energy systems lack intelligent management capabilities, leading to:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Inefficient energy usage during peak tariff periods
+Missed opportunities for cost savings
+Complex monitoring and management
+Limited control over energy consumption
+
+Solar Shakti addresses these challenges by providing:
+
+Automated energy optimization
+User-friendly monitoring
+Smart scheduling capabilities
+Intelligent forecasting and recommendations
+
+💪 Competitive Advantages
+What sets Solar Shakti apart:
+
+Seamless Google Authentication
+Real-time reporting and monitoring
+Intuitive charts and infographics
+Comprehensive control features
+Mobile-first approach
+Clean, modern UI
+Proactive alerts and notifications
+
+🌱 Impact
+Solar Shakti helps users:
+
+Reduce electricity bills
+Maximize solar investment returns
+Contribute to environmental sustainability
+Make informed energy decisions
+Automate energy management
+
+👥 Team
+Made with ❤️ by BeanBagCoders:
+
+Om Sarraf - FullSnack Coder
+Naman - Trader who Codes
+Kartikey - UI Curator
+
+🔗 Links
+
+Live Demo
+Download App
+Documentation
+
+
+Solar Shakti - Illuminating the path to sustainable energy management 🌞
