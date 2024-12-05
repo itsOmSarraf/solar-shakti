@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
@@ -28,7 +28,9 @@ import {
 	Wifi,
 	Languages,
 	LogOut,
-	ChevronRight
+	ChevronRight,
+	Signal,
+	Activity
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
@@ -96,6 +98,63 @@ const SettingsPage = () => {
 		gridBackup: true
 	});
 
+	// WiFi connection state
+	const [wifiDetails, setWifiDetails] = useState(null);
+
+	// Get WiFi details from device
+	useEffect(() => {
+		const getWifiDetails = async () => {
+			try {
+				// Check if Network Information API is available
+				if ('connection' in navigator) {
+					const connection = navigator.connection;
+
+					// Get WiFi details
+					const details = {
+						type: connection.type,
+						downlink: connection.downlink, // Connection speed in Mbps
+						rtt: connection.rtt, // Round trip time in ms
+						effectiveType: connection.effectiveType // 4g, 3g etc
+					};
+
+					// Get network SSID if available and permitted
+					if ('getNetworkInformation' in navigator) {
+						try {
+							const networkInfo = await navigator.getNetworkInformation();
+							details.ssid = networkInfo.ssid;
+						} catch (e) {
+							details.ssid = 'Connected'; // Fallback if SSID access denied
+						}
+					}
+
+					setWifiDetails(details);
+
+					// Listen for connection changes
+					connection.addEventListener('change', () => {
+						setWifiDetails((prev) => ({
+							...prev,
+							type: connection.type,
+							downlink: connection.downlink,
+							rtt: connection.rtt,
+							effectiveType: connection.effectiveType
+						}));
+					});
+				}
+			} catch (error) {
+				console.error('Error getting network details:', error);
+				setWifiDetails({
+					type: 'unknown',
+					downlink: 0,
+					rtt: 0,
+					effectiveType: 'unknown',
+					ssid: 'Unknown Network'
+				});
+			}
+		};
+
+		getWifiDetails();
+	}, []);
+
 	const handleLogout = () => {
 		// Implement logout logic
 		console.log('Logging out...');
@@ -128,6 +187,56 @@ const SettingsPage = () => {
 						</div>
 					</div>
 				</div>
+
+				{/* WiFi Analysis Card */}
+				{wifiDetails && (
+					<div className='px-4 mb-6'>
+						<Card className='bg-blue-50 dark:bg-blue-900/20'>
+							<CardContent className='p-4'>
+								<div className='flex items-center justify-between mb-4'>
+									<div className='flex items-center gap-2'>
+										<Wifi className='w-5 h-5 text-blue-600 dark:text-blue-400' />
+										<h3 className='font-semibold text-gray-900 dark:text-gray-100'>
+											{wifiDetails.ssid}
+										</h3>
+									</div>
+									<div className='flex items-center gap-1'>
+										<Signal className='w-4 h-4 text-blue-600 dark:text-blue-400' />
+										<span className='text-sm font-medium text-blue-600 dark:text-blue-400'>
+											{wifiDetails.type}
+										</span>
+									</div>
+								</div>
+								<div className='grid grid-cols-2 gap-4'>
+									<div className='space-y-1'>
+										<p className='text-sm text-gray-600 dark:text-gray-400'>
+											Connection
+										</p>
+										<p className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+											{wifiDetails.effectiveType}
+										</p>
+									</div>
+									<div className='space-y-1'>
+										<p className='text-sm text-gray-600 dark:text-gray-400'>
+											Speed
+										</p>
+										<p className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+											{wifiDetails.downlink} Mbps
+										</p>
+									</div>
+									<div className='space-y-1'>
+										<p className='text-sm text-gray-600 dark:text-gray-400'>
+											Latency
+										</p>
+										<p className='text-sm font-medium text-gray-900 dark:text-gray-100'>
+											{wifiDetails.rtt}ms
+										</p>
+									</div>
+								</div>
+							</CardContent>
+						</Card>
+					</div>
+				)}
 
 				{/* Notification Settings */}
 				<SettingsSection title='Notifications'>
