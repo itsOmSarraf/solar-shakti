@@ -23,11 +23,12 @@ export function Navbar() {
             className={`
                 sticky top-0
                 transition-all duration-300 
-                bg-white
+                bg-white dark:bg-gray-950
+                border-b border-gray-200 dark:border-gray-800
                 z-50
                 ${isScrolled
-                    ? 'bg-white'
-                    : 'bg-white'
+                    ? 'shadow-sm'
+                    : ''
                 }
             `}
         >
@@ -42,7 +43,7 @@ export function Navbar() {
                         className="size-8 rounded-lg"
                         priority
                     />
-                    <span className="font-semibold text-xl tracking-tight">
+                    <span className="font-semibold text-xl tracking-tight text-gray-900 dark:text-gray-100">
                         {APP_NAME}
                     </span>
                 </Link>

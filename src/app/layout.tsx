@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { BottomNav } from '@/components/ComponentsExport';
 import { Navbar } from "@/components/Navbar";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 // Font configuration
 const inter = Inter({
@@ -178,41 +179,40 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body>
-        {/* <ThemeProvider
+        <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        > */}
-        <div
-          className={`
+        >
+          <div
+            className={`
               relative 
               flex 
               min-h-[100dvh] 
               flex-col 
-              bg-background 
               antialiased
               ${inter.className}
             `}
-        >
-          {/* Max width container */}
-          <div className="mx-auto w-full max-w-md">
-            {/* Header */}
-            <Navbar />
+          >
+            {/* Max width container */}
+            <div className="mx-auto w-full max-w-md">
+              {/* Header */}
+              <Navbar />
 
-            {/* Main Content */}
-            <main className="flex-1 px-4 pt-4 pb-24">
-              {children}
-            </main>
+              {/* Main Content */}
+              <main className="flex-1 px-2 pt-4 pb-24">
+                {children}
+              </main>
 
-            {/* Bottom Navigation */}
-            <BottomNav />
+              {/* Bottom Navigation */}
+              <BottomNav />
 
-            {/* Toast Notifications */}
-            <Toaster />
+              {/* Toast Notifications */}
+              <Toaster />
+            </div>
           </div>
-        </div>
-        {/* </ThemeProvider> */}
+        </ThemeProvider>
       </body>
     </html >
   );

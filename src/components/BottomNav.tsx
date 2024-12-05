@@ -38,7 +38,7 @@ export function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50">
+        <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 pb-safe z-50">
             <div className="max-w-md mx-auto flex justify-around">
                 {navItems.map((item) => {
                     const Icon = item.icon;
@@ -53,13 +53,13 @@ export function BottomNav() {
                             <div className="relative">
                                 <Icon
                                     className={`w-6 h-6 ${isActive
-                                        ? 'text-green-600'
-                                        : 'text-gray-500'
+                                        ? 'text-green-600 dark:text-green-500'
+                                        : 'text-gray-500 dark:text-gray-400'
                                         }`}
                                 />
                                 {item.badge && (
                                     <Badge
-                                        className="absolute -top-1.5 -right-1.5 h-4 w-4 p-0 flex items-center justify-center bg-red-500"
+                                        className="absolute -top-1.5 -right-1.5 h-4 w-4 p-0 flex items-center justify-center bg-red-500 dark:bg-red-600"
                                     >
                                         <span className="text-[10px]">
                                             {item.badge}
@@ -69,8 +69,8 @@ export function BottomNav() {
                             </div>
                             <span
                                 className={`mt-1 text-xs ${isActive
-                                    ? 'text-green-600 font-medium'
-                                    : 'text-gray-500'
+                                    ? 'text-green-600 dark:text-green-500 font-medium'
+                                    : 'text-gray-500 dark:text-gray-400'
                                     }`}
                             >
                                 {item.label}

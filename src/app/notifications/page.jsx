@@ -17,6 +17,7 @@ import {
 	XCircle
 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // Generate random timestamps within the last 24 hours
 const getRandomTimestamp = () => {
@@ -32,22 +33,34 @@ const getRandomTimestamp = () => {
 const notificationTypes = {
 	SOLAR_PRODUCTION: {
 		icon: Sun,
-		color: 'text-amber-500',
-		bgColor: 'bg-amber-50'
+		color: 'text-amber-500 dark:text-amber-400',
+		bgColor: 'bg-amber-50 dark:bg-amber-900/20'
 	},
-	ENERGY_USAGE: { icon: Zap, color: 'text-blue-500', bgColor: 'bg-blue-50' },
+	ENERGY_USAGE: {
+		icon: Zap,
+		color: 'text-blue-500 dark:text-blue-400',
+		bgColor: 'bg-blue-50 dark:bg-blue-900/20'
+	},
 	COST_ALERT: {
 		icon: DollarSign,
-		color: 'text-green-500',
-		bgColor: 'bg-green-50'
+		color: 'text-green-500 dark:text-green-400',
+		bgColor: 'bg-green-50 dark:bg-green-900/20'
 	},
 	DEVICE_ALERT: {
 		icon: AlertCircle,
-		color: 'text-red-500',
-		bgColor: 'bg-red-50'
+		color: 'text-red-500 dark:text-red-400',
+		bgColor: 'bg-red-50 dark:bg-red-900/20'
 	},
-	BATTERY: { icon: Battery, color: 'text-purple-500', bgColor: 'bg-purple-50' },
-	SCHEDULE: { icon: Timer, color: 'text-indigo-500', bgColor: 'bg-indigo-50' }
+	BATTERY: {
+		icon: Battery,
+		color: 'text-purple-500 dark:text-purple-400',
+		bgColor: 'bg-purple-50 dark:bg-purple-900/20'
+	},
+	SCHEDULE: {
+		icon: Timer,
+		color: 'text-indigo-500 dark:text-indigo-400',
+		bgColor: 'bg-indigo-50 dark:bg-indigo-900/20'
+	}
 };
 
 // Generate initial notifications
@@ -111,45 +124,42 @@ const generateNotifications = () => {
 	return notifications.sort((a, b) => b.timestamp - a.timestamp);
 };
 
-const NotificationCard = ({ notification, onDelete, onMarkAsRead }) => {
+const NotificationCard = ({ notification, onDelete }) => {
 	const typeInfo = notificationTypes[notification.type];
 	const IconComponent = typeInfo.icon;
 
 	return (
-		<Alert
-			className={`mb-3 ${typeInfo.bgColor} border-l-4 ${
-				notification.isRead ? 'opacity-70' : ''
-			}`}
-			style={{ borderLeftColor: typeInfo.color.replace('text', 'rgb') }}>
-			<IconComponent className={`h-4 w-4 ${typeInfo.color}`} />
-			<AlertTitle className='flex justify-between items-center'>
-				<span className='font-semibold'>{notification.title}</span>
-				<div className='flex items-center gap-2'>
-					{!notification.isRead && (
-						<Button
-							variant='ghost'
-							size='icon'
-							className='h-8 w-8'
-							onClick={() => onMarkAsRead(notification.id)}>
-							<Check className='h-4 w-4' />
-						</Button>
-					)}
+		<motion.div
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0, x: -100 }}
+			transition={{ duration: 0.2 }}>
+			<Alert
+				className={`mb-3 ${typeInfo.bgColor} border-l-4 ${
+					notification.isRead ? 'opacity-70' : ''
+				}`}
+				style={{ borderLeftColor: typeInfo.color.replace('text', 'rgb') }}>
+				<IconComponent className={`h-4 w-4 ${typeInfo.color}`} />
+				<AlertTitle className='flex justify-between items-center'>
+					<span className='font-semibold'>{notification.title}</span>
 					<Button
 						variant='ghost'
 						size='icon'
-						className='h-8 w-8 text-gray-500 hover:text-red-500'
+						className='h-8 w-8 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400'
 						onClick={() => onDelete(notification.id)}>
 						<Trash2 className='h-4 w-4' />
 					</Button>
-				</div>
-			</AlertTitle>
-			<AlertDescription>
-				<p className='text-sm mt-1'>{notification.message}</p>
-				<p className='text-xs text-gray-500 mt-1'>
-					{new Date(notification.timestamp).toLocaleString()}
-				</p>
-			</AlertDescription>
-		</Alert>
+				</AlertTitle>
+				<AlertDescription>
+					<p className='text-sm mt-1 dark:text-gray-300'>
+						{notification.message}
+					</p>
+					<p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>
+						{new Date(notification.timestamp).toLocaleString()}
+					</p>
+				</AlertDescription>
+			</Alert>
+		</motion.div>
 	);
 };
 
@@ -161,66 +171,46 @@ const NotificationsPage = () => {
 	};
 
 	const handleClearAll = () => {
-		setNotifications([]);
+		setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
+		setTimeout(() => setNotifications([]), 200);
 	};
-
-	const handleMarkAsRead = (id) => {
-		setNotifications(
-			notifications.map((notif) =>
-				notif.id === id ? { ...notif, isRead: true } : notif
-			)
-		);
-	};
-
-	const unreadCount = notifications.filter((n) => !n.isRead).length;
 
 	return (
-		<div className='min-h-screen bg-gray-50 p-4'>
+		<div className='min-h-screen bg-gray-50 dark:bg-gray-900 p-4'>
 			<div className='flex justify-between items-center mb-4'>
-				<h1 className='text-2xl font-bold'>Notifications</h1>
-				<div className='flex gap-2'>
-					{unreadCount > 0 && (
-						<Button
-							variant='outline'
-							size='sm'
-							onClick={() =>
-								setNotifications(
-									notifications.map((n) => ({ ...n, isRead: true }))
-								)
-							}
-							className='flex items-center gap-1'>
-							<Check className='h-4 w-4' />
-							Mark all read
-						</Button>
-					)}
+				<h1 className='text-2xl font-bold dark:text-white'>Notifications</h1>
+				{notifications.length > 0 && (
 					<Button
 						variant='outline'
 						size='sm'
 						onClick={handleClearAll}
-						className='flex items-center gap-1 text-red-500 hover:text-red-600'>
-						<XCircle className='h-4 w-4' />
+						className='flex items-center gap-1 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300'>
+						<Check className='h-4 w-4' />
 						Clear all
 					</Button>
-				</div>
+				)}
 			</div>
 
 			{notifications.length === 0 ? (
-				<Card className='mt-8'>
+				<Card className='mt-8 dark:bg-gray-800 dark:border-gray-700'>
 					<CardContent className='flex flex-col items-center justify-center py-8'>
-						<BellOff className='h-12 w-12 text-gray-400 mb-2' />
-						<p className='text-gray-500 text-center'>No notifications</p>
+						<BellOff className='h-12 w-12 text-gray-400 dark:text-gray-500 mb-2' />
+						<p className='text-gray-500 dark:text-gray-400 text-center'>
+							No notifications
+						</p>
 					</CardContent>
 				</Card>
 			) : (
 				<ScrollArea className='h-[calc(100vh-120px)]'>
-					{notifications.map((notification) => (
-						<NotificationCard
-							key={notification.id}
-							notification={notification}
-							onDelete={handleDelete}
-							onMarkAsRead={handleMarkAsRead}
-						/>
-					))}
+					<AnimatePresence mode='sync'>
+						{notifications.map((notification) => (
+							<NotificationCard
+								key={notification.id}
+								notification={notification}
+								onDelete={handleDelete}
+							/>
+						))}
+					</AnimatePresence>
 				</ScrollArea>
 			)}
 		</div>

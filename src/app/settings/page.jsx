@@ -30,11 +30,14 @@ import {
 	LogOut,
 	ChevronRight
 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 // Settings Section Component
 const SettingsSection = ({ title, children }) => (
 	<div className='mb-6'>
-		<h2 className='text-lg font-semibold mb-4 px-4'>{title}</h2>
+		<h2 className='text-lg font-semibold mb-4 px-4 text-gray-900 dark:text-gray-100'>
+			{title}
+		</h2>
 		<div className='space-y-2'>{children}</div>
 	</div>
 );
@@ -48,17 +51,19 @@ const SettingsItem = ({
 	showArrow = false
 }) => (
 	<Card
-		className='cursor-pointer hover:bg-gray-50'
+		className='cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50'
 		onClick={onClick}>
 		<CardContent className='p-4'>
 			<div className='flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
-					<Icon className='w-5 h-5 text-gray-500' />
-					<span>{label}</span>
+					<Icon className='w-5 h-5 text-gray-500 dark:text-gray-400' />
+					<span className='text-gray-900 dark:text-gray-100'>{label}</span>
 				</div>
 				<div className='flex items-center gap-2'>
 					{children}
-					{showArrow && <ChevronRight className='w-4 h-4 text-gray-400' />}
+					{showArrow && (
+						<ChevronRight className='w-4 h-4 text-gray-400 dark:text-gray-500' />
+					)}
 				</div>
 			</div>
 		</CardContent>
@@ -66,6 +71,7 @@ const SettingsItem = ({
 );
 
 const SettingsPage = () => {
+	const { theme, setTheme } = useTheme();
 	// State management for various settings
 	const [notifications, setNotifications] = useState({
 		push: true,
@@ -104,15 +110,21 @@ const SettingsPage = () => {
 		<ScrollArea className='h-screen'>
 			<div className='pb-6'>
 				{/* Profile Section */}
-				<div className='bg-green-50 p-4 mb-6'>
+				<div className='bg-green-50 dark:bg-green-900/20 p-4 mb-6'>
 					<div className='flex items-center gap-4'>
-						<div className='w-16 h-16 rounded-full bg-green-200 flex items-center justify-center'>
-							<User className='w-8 h-8 text-green-600' />
+						<div className='w-16 h-16 rounded-full bg-green-200 dark:bg-green-800 flex items-center justify-center'>
+							<User className='w-8 h-8 text-green-600 dark:text-green-400' />
 						</div>
 						<div>
-							<h2 className='text-lg font-semibold'>John Smith</h2>
-							<p className='text-sm text-gray-500'>john.smith@example.com</p>
-							<p className='text-xs text-green-600'>Premium Member</p>
+							<h2 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+								Naman Makkar
+							</h2>
+							<p className='text-sm text-gray-500 dark:text-gray-400'>
+								naman.makkar@example.com
+							</p>
+							<p className='text-xs text-green-600 dark:text-green-400'>
+								Premium Member
+							</p>
 						</div>
 					</div>
 				</div>
@@ -203,12 +215,9 @@ const SettingsPage = () => {
 						icon={Moon}
 						label='Dark Mode'>
 						<Switch
-							checked={preferences.theme === 'dark'}
+							checked={theme === 'dark'}
 							onCheckedChange={(checked) =>
-								setPreferences((prev) => ({
-									...prev,
-									theme: checked ? 'dark' : 'light'
-								}))
+								setTheme(checked ? 'dark' : 'light')
 							}
 						/>
 					</SettingsItem>

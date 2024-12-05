@@ -45,15 +45,23 @@ const MetricBox = ({ icon: Icon, label, value, trend, color, subValue }) => (
 						<Icon className='w-5 h-5 text-white' />
 					</div>
 					<div>
-						<p className='text-sm text-gray-500'>{label}</p>
-						<p className='text-xl font-bold'>{value}</p>
-						{subValue && <p className='text-xs text-gray-500'>{subValue}</p>}
+						<p className='text-sm text-gray-500 dark:text-gray-400'>{label}</p>
+						<p className='text-xl font-bold text-gray-900 dark:text-gray-100'>
+							{value}
+						</p>
+						{subValue && (
+							<p className='text-xs text-gray-500 dark:text-gray-400'>
+								{subValue}
+							</p>
+						)}
 					</div>
 				</div>
 				{trend && (
 					<span
 						className={`text-sm ${
-							trend > 0 ? 'text-green-500' : 'text-red-500'
+							trend > 0
+								? 'text-green-500 dark:text-green-400'
+								: 'text-red-500 dark:text-red-400'
 						}`}>
 						{trend > 0 ? '+' : ''}
 						{trend}%
@@ -170,9 +178,10 @@ const EnergyStatisticsExpanded = () => {
 	}, []);
 
 	return (
-		// <ScrollArea className='z-10'>
 		<div className='z-10'>
-			<h1 className='text-2xl font-bold mb-6'>Energy Analytics Dashboard</h1>
+			<h1 className='text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100'>
+				Energy Analytics Dashboard
+			</h1>
 
 			{/* Live Metrics Grid */}
 			<div className='mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
@@ -213,17 +222,30 @@ const EnergyStatisticsExpanded = () => {
 			{/* Real-time Energy Flow */}
 			<Card className=''>
 				<CardHeader>
-					<CardTitle>Real-time Energy Flow</CardTitle>
+					<CardTitle className='text-gray-900 dark:text-gray-100'>
+						Real-time Energy Flow
+					</CardTitle>
 				</CardHeader>
 				<CardContent className='h-[400px]'>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'>
 						<LineChart data={liveData}>
-							<CartesianGrid strokeDasharray='3 3' />
-							<XAxis dataKey='time' />
-							<YAxis />
-							<Tooltip />
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb dark:stroke-gray-700'
+							/>
+							<XAxis
+								dataKey='time'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip
+								contentStyle={{
+									backgroundColor: '#fff ',
+									border: '1px solid #e5e7eb'
+								}}
+							/>
 							<Legend />
 							<Line
 								type='monotone'
@@ -254,30 +276,43 @@ const EnergyStatisticsExpanded = () => {
 			{/* Carbon Emissions Impact */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Carbon Emissions Reduction</CardTitle>
+					<CardTitle className='text-gray-900 dark:text-white'>
+						Carbon Emissions Reduction
+					</CardTitle>
 				</CardHeader>
 				<CardContent className='h-[400px]'>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'>
 						<AreaChart data={carbonData}>
-							<CartesianGrid strokeDasharray='3 3' />
-							<XAxis dataKey='month' />
-							<YAxis />
-							<Tooltip />
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb'
+							/>
+							<XAxis
+								dataKey='month'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip
+								contentStyle={{
+									backgroundColor: '#fff ',
+									border: '1px solid #e5e7eb '
+								}}
+							/>
 							<Legend />
 							<Area
 								type='monotone'
 								dataKey='baseline'
 								stroke='#ef4444'
-								fill='#fca5a5'
+								fill='#fee2e2 '
 								name='Baseline Emissions'
 							/>
 							<Area
 								type='monotone'
 								dataKey='reduced'
 								stroke='#10b981'
-								fill='#6ee7b7'
+								fill='#d1fae5 '
 								name='Reduced Emissions'
 							/>
 						</AreaChart>
@@ -288,17 +323,30 @@ const EnergyStatisticsExpanded = () => {
 			{/* Cost Analysis */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Cost Comparison</CardTitle>
+					<CardTitle className='text-gray-900 dark:text-gray-100'>
+						Cost Comparison
+					</CardTitle>
 				</CardHeader>
 				<CardContent className='h-[400px]'>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'>
 						<BarChart data={costData}>
-							<CartesianGrid strokeDasharray='3 3' />
-							<XAxis dataKey='month' />
-							<YAxis />
-							<Tooltip />
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb dark:stroke-gray-700'
+							/>
+							<XAxis
+								dataKey='month'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip
+								contentStyle={{
+									backgroundColor: '#fff dark:bg-gray-800',
+									border: '1px solid #e5e7eb dark:border-gray-700'
+								}}
+							/>
 							<Legend />
 							<Bar
 								dataKey='withoutSolar'
@@ -319,7 +367,9 @@ const EnergyStatisticsExpanded = () => {
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 				<Card>
 					<CardHeader>
-						<CardTitle>Energy Source Distribution</CardTitle>
+						<CardTitle className='text-gray-900 dark:text-gray-100'>
+							Energy Source Distribution
+						</CardTitle>
 					</CardHeader>
 					<CardContent className='h-[400px]'>
 						<ResponsiveContainer
@@ -335,7 +385,12 @@ const EnergyStatisticsExpanded = () => {
 									paddingAngle={5}
 									dataKey='value'
 								/>
-								<Tooltip />
+								<Tooltip
+									contentStyle={{
+										backgroundColor: '#fff dark:bg-gray-800',
+										border: '1px solid #e5e7eb dark:border-gray-700'
+									}}
+								/>
 								<Legend />
 							</PieChart>
 						</ResponsiveContainer>
@@ -344,7 +399,9 @@ const EnergyStatisticsExpanded = () => {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Peak Usage Times</CardTitle>
+						<CardTitle className='text-gray-900 dark:text-gray-100'>
+							Peak Usage Times
+						</CardTitle>
 					</CardHeader>
 					<CardContent className='h-[400px]'>
 						<ResponsiveContainer
@@ -365,7 +422,12 @@ const EnergyStatisticsExpanded = () => {
 									dataKey='value'
 								/>
 								<Legend />
-								<Tooltip />
+								<Tooltip
+									contentStyle={{
+										backgroundColor: '#fff dark:bg-gray-800',
+										border: '1px solid #e5e7eb dark:border-gray-700'
+									}}
+								/>
 							</RadialBarChart>
 						</ResponsiveContainer>
 					</CardContent>
@@ -375,17 +437,30 @@ const EnergyStatisticsExpanded = () => {
 			{/* Weather Impact */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Weather Impact on Solar Generation</CardTitle>
+					<CardTitle className='text-gray-900 dark:text-gray-100'>
+						Weather Impact on Solar Generation
+					</CardTitle>
 				</CardHeader>
 				<CardContent className='h-[400px]'>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'>
 						<BarChart data={weatherImpactData}>
-							<CartesianGrid strokeDasharray='3 3' />
-							<XAxis dataKey='day' />
-							<YAxis />
-							<Tooltip />
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb dark:stroke-gray-700'
+							/>
+							<XAxis
+								dataKey='day'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip
+								contentStyle={{
+									backgroundColor: '#fff dark:bg-gray-800',
+									border: '1px solid #e5e7eb dark:border-gray-700'
+								}}
+							/>
 							<Legend />
 							<Bar
 								dataKey='sunny'
@@ -410,22 +485,35 @@ const EnergyStatisticsExpanded = () => {
 			{/* System Efficiency */}
 			<Card>
 				<CardHeader>
-					<CardTitle>24-Hour System Efficiency</CardTitle>
+					<CardTitle className='text-gray-900 dark:text-white'>
+						24-Hour System Efficiency
+					</CardTitle>
 				</CardHeader>
 				<CardContent className='h-[400px]'>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'>
 						<AreaChart data={efficiencyData}>
-							<CartesianGrid strokeDasharray='3 3' />
-							<XAxis dataKey='hour' />
-							<YAxis />
-							<Tooltip />
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb'
+							/>
+							<XAxis
+								dataKey='hour'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip
+								contentStyle={{
+									backgroundColor: '#fff',
+									border: '1px solid #e5e7eb '
+								}}
+							/>
 							<Area
 								type='monotone'
 								dataKey='efficiency'
 								stroke='#10b981'
-								fill='#6ee7b7'
+								fill='#d1fae5'
 								name='Efficiency %'
 							/>
 						</AreaChart>
@@ -433,7 +521,6 @@ const EnergyStatisticsExpanded = () => {
 				</CardContent>
 			</Card>
 		</div>
-		// </ScrollArea>
 	);
 };
 

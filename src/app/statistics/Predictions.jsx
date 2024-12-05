@@ -125,7 +125,7 @@ const generatePredictionData = (dayCount = 1, selectedDay) => {
 
 // Components
 const TODPriceIndicator = ({ period, rate }) => (
-	<div className='flex items-center justify-between p-2 bg-gray-50 rounded-lg'>
+	<div className='flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg'>
 		<div className='flex items-center gap-2'>
 			<div
 				className={`w-3 h-3 rounded-full ${
@@ -145,12 +145,14 @@ const TODPriceIndicator = ({ period, rate }) => (
 );
 
 const MetricCard = ({ icon: Icon, label, value, subValue, trend = null }) => (
-	<div className='p-4 bg-white rounded-lg shadow'>
+	<div className='p-4 bg-white dark:bg-gray-800 rounded-lg shadow'>
 		<div className='flex justify-between items-start'>
 			<div className='space-y-1'>
-				<p className='text-sm text-gray-500'>{label}</p>
+				<p className='text-sm text-gray-500 dark:text-gray-400'>{label}</p>
 				<p className='text-xl font-bold'>{value}</p>
-				{subValue && <p className='text-xs text-gray-500'>{subValue}</p>}
+				{subValue && (
+					<p className='text-xs text-gray-500 dark:text-gray-400'>{subValue}</p>
+				)}
 			</div>
 			<div className='flex items-center gap-2'>
 				{trend !== null && (
@@ -166,7 +168,7 @@ const MetricCard = ({ icon: Icon, label, value, subValue, trend = null }) => (
 						{Math.abs(trend)}%
 					</span>
 				)}
-				<Icon className='w-5 h-5 text-gray-400' />
+				<Icon className='w-5 h-5 text-gray-400 dark:text-gray-500' />
 			</div>
 		</div>
 	</div>
@@ -185,23 +187,26 @@ const LoadChart = ({ selectedDayData }) => (
 		<ComposedChart
 			data={selectedDayData}
 			margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-			<CartesianGrid strokeDasharray='3 3' />
+			<CartesianGrid
+				strokeDasharray='3 3'
+				stroke='#374151'
+			/>
 			<XAxis
 				dataKey='hour'
-				tick={{ fontSize: 8 }}
+				tick={{ fontSize: 8, fill: '#9CA3AF' }}
 				interval={3}
 			/>
 			<YAxis
 				yAxisId='left'
-				tick={{ fontSize: 12 }}
+				tick={{ fontSize: 12, fill: '#9CA3AF' }}
 			/>
 			<YAxis
 				yAxisId='right'
 				orientation='right'
-				tick={{ fontSize: 12 }}
+				tick={{ fontSize: 12, fill: '#9CA3AF' }}
 			/>
-			<Tooltip />
-			<Legend wrapperStyle={{ fontSize: '12px' }} />
+			<Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none' }} />
+			<Legend wrapperStyle={{ fontSize: '12px', color: '#9CA3AF' }} />
 			<Area
 				yAxisId='left'
 				type='monotone'
@@ -232,15 +237,18 @@ const CostChart = ({ selectedDayData }) => (
 		<ComposedChart
 			data={selectedDayData}
 			margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-			<CartesianGrid strokeDasharray='3 3' />
+			<CartesianGrid
+				strokeDasharray='3 3'
+				stroke='#374151'
+			/>
 			<XAxis
 				dataKey='hour'
-				tick={{ fontSize: 12 }}
+				tick={{ fontSize: 12, fill: '#9CA3AF' }}
 				interval={3}
 			/>
-			<YAxis tick={{ fontSize: 12 }} />
-			<Tooltip />
-			<Legend wrapperStyle={{ fontSize: '12px' }} />
+			<YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} />
+			<Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none' }} />
+			<Legend wrapperStyle={{ fontSize: '12px', color: '#9CA3AF' }} />
 			<Bar
 				dataKey='cost'
 				name='Cost'
@@ -261,19 +269,22 @@ const OptimizationChart = ({ selectedDayData }) => (
 		<ComposedChart
 			data={selectedDayData}
 			margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-			<CartesianGrid strokeDasharray='3 3' />
+			<CartesianGrid
+				strokeDasharray='3 3'
+				stroke='#374151'
+			/>
 			<XAxis
 				dataKey='hour'
-				tick={{ fontSize: 12 }}
+				tick={{ fontSize: 12, fill: '#9CA3AF' }}
 				interval={3}
 			/>
-			<YAxis tick={{ fontSize: 12 }} />
-			<Tooltip />
-			<Legend wrapperStyle={{ fontSize: '12px' }} />
+			<YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} />
+			<Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none' }} />
+			<Legend wrapperStyle={{ fontSize: '12px', color: '#9CA3AF' }} />
 			<Area
 				type='monotone'
 				dataKey='load'
-				fill='#bfdbfe'
+				fill='#1e40af'
 				stroke='#3b82f6'
 				name='Current'
 			/>
@@ -286,7 +297,7 @@ const OptimizationChart = ({ selectedDayData }) => (
 			/>
 			<ReferenceLine
 				y={3.5}
-				label={{ value: 'Peak', fontSize: 12 }}
+				label={{ value: 'Peak', fontSize: 12, fill: '#9CA3AF' }}
 				stroke='#ef4444'
 				strokeDasharray='3 3'
 			/>
@@ -313,14 +324,17 @@ const WeeklyChart = ({ predictionData }) => (
 				};
 			})}
 			margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-			<CartesianGrid strokeDasharray='3 3' />
+			<CartesianGrid
+				strokeDasharray='3 3'
+				stroke='#374151'
+			/>
 			<XAxis
 				dataKey='day'
-				tick={{ fontSize: 12 }}
+				tick={{ fontSize: 12, fill: '#9CA3AF' }}
 			/>
-			<YAxis tick={{ fontSize: 12 }} />
-			<Tooltip />
-			<Legend wrapperStyle={{ fontSize: '12px' }} />
+			<YAxis tick={{ fontSize: 12, fill: '#9CA3AF' }} />
+			<Tooltip contentStyle={{ backgroundColor: '#1F2937', border: 'none' }} />
+			<Legend wrapperStyle={{ fontSize: '12px', color: '#9CA3AF' }} />
 			<Bar
 				dataKey='currentCost'
 				name='Current'
@@ -346,7 +360,9 @@ const PredictionsTable = ({ selectedDayData }) => (
 		<Table>
 			<TableHeader>
 				<TableRow>
-					<TableHead className='sticky left-0 z-20 bg-white'>Time</TableHead>
+					<TableHead className='sticky left-0 z-20 bg-white dark:bg-gray-800'>
+						Time
+					</TableHead>
 					<TableHead>Period</TableHead>
 					<TableHead>Load</TableHead>
 					<TableHead>Solar</TableHead>
@@ -360,7 +376,7 @@ const PredictionsTable = ({ selectedDayData }) => (
 			<TableBody>
 				{selectedDayData.map((hour) => (
 					<TableRow key={hour.hour}>
-						<TableCell className='sticky left-0 z-20 bg-white font-medium whitespace-nowrap'>
+						<TableCell className='sticky left-0 z-20 bg-white dark:bg-gray-800 font-medium whitespace-nowrap'>
 							{hour.hour}
 						</TableCell>
 						<TableCell>
@@ -379,7 +395,7 @@ const PredictionsTable = ({ selectedDayData }) => (
 						<TableCell>
 							<div className='flex items-center gap-2'>
 								<span>{hour.load}</span>
-								<span className='text-xs text-gray-500'>
+								<span className='text-xs text-gray-500 dark:text-gray-400'>
 									({hour.optimizedLoad})
 								</span>
 							</div>
@@ -393,7 +409,7 @@ const PredictionsTable = ({ selectedDayData }) => (
 									className={`w-4 h-4 ${
 										hour.cost > hour.optimizedCost
 											? 'text-green-500'
-											: 'text-gray-300'
+											: 'text-gray-300 dark:text-gray-600'
 									}`}
 								/>
 							</div>
@@ -441,37 +457,37 @@ const PredictionsTable = ({ selectedDayData }) => (
 
 const KeyActions = () => (
 	<div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-		<div className='p-4 bg-white rounded-lg border'>
+		<div className='p-4 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700'>
 			<div className='flex flex-col items-center text-center space-y-2'>
-				<div className='p-3 rounded-full bg-amber-100'>
-					<Sun className='w-6 h-6 text-amber-600' />
+				<div className='p-3 rounded-full bg-amber-100 dark:bg-amber-900'>
+					<Sun className='w-6 h-6 text-amber-600 dark:text-amber-400' />
 				</div>
 				<h3 className='font-medium'>Solar Optimization</h3>
-				<p className='text-sm text-gray-600'>
+				<p className='text-sm text-gray-600 dark:text-gray-400'>
 					Schedule high-power appliances during peak solar hours (10:00-15:00)
 				</p>
 			</div>
 		</div>
 
-		<div className='p-4 bg-white rounded-lg border'>
+		<div className='p-4 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700'>
 			<div className='flex flex-col items-center text-center space-y-2'>
-				<div className='p-3 rounded-full bg-blue-100'>
-					<Clock className='w-6 h-6 text-blue-600' />
+				<div className='p-3 rounded-full bg-blue-100 dark:bg-blue-900'>
+					<Clock className='w-6 h-6 text-blue-600 dark:text-blue-400' />
 				</div>
 				<h3 className='font-medium'>Load Shifting</h3>
-				<p className='text-sm text-gray-600'>
+				<p className='text-sm text-gray-600 dark:text-gray-400'>
 					Move non-essential loads to off-peak hours for maximum savings
 				</p>
 			</div>
 		</div>
 
-		<div className='p-4 bg-white rounded-lg border'>
+		<div className='p-4 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700'>
 			<div className='flex flex-col items-center text-center space-y-2'>
-				<div className='p-3 rounded-full bg-green-100'>
-					<Battery className='w-6 h-6 text-green-600' />
+				<div className='p-3 rounded-full bg-green-100 dark:bg-green-900'>
+					<Battery className='w-6 h-6 text-green-600 dark:text-green-400' />
 				</div>
 				<h3 className='font-medium'>Battery Strategy</h3>
-				<p className='text-sm text-gray-600'>
+				<p className='text-sm text-gray-600 dark:text-gray-400'>
 					Charge during solar peak, discharge during evening peak hours
 				</p>
 			</div>
@@ -567,7 +583,7 @@ const PredictionsPage = () => {
 
 			{isLoading ? (
 				<div className='flex items-center justify-center min-h-[200px]'>
-					<div className='animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900'></div>
+					<div className='animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100'></div>
 				</div>
 			) : (
 				<>
@@ -659,7 +675,7 @@ const PredictionsPage = () => {
 									<Clock className='w-5 h-5 text-amber-500 flex-shrink-0' />
 									<div>
 										<h4 className='font-medium'>Load Shifting</h4>
-										<p className='text-sm text-gray-600'>
+										<p className='text-sm text-gray-600 dark:text-gray-400'>
 											Shift heavy appliance usage to off-peak hours
 											(22:00-06:00) to save ₹
 											{(
@@ -673,7 +689,7 @@ const PredictionsPage = () => {
 									<Battery className='w-5 h-5 text-green-500 flex-shrink-0' />
 									<div>
 										<h4 className='font-medium'>Battery Usage</h4>
-										<p className='text-sm text-gray-600'>
+										<p className='text-sm text-gray-600 dark:text-gray-400'>
 											Charge during solar peak (10:00-16:00) for optimal energy
 											storage
 										</p>

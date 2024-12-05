@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger
-} from '@/components/ui/sheet';
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
+} from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
@@ -260,7 +260,9 @@ const SmartAppliancesPage = () => {
 
 	return (
 		<div className='mb-6'>
-			<h2 className='text-2xl font-bold mb-4'>Smart Appliances</h2>
+			<h2 className='text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100'>
+				Smart Appliances
+			</h2>
 
 			{/* Schedule Selection */}
 			<div className='grid grid-cols-3 gap-3 mb-6'>
@@ -269,13 +271,15 @@ const SmartAppliancesPage = () => {
 						key={key}
 						variant={activeSchedule === key ? 'default' : 'outline'}
 						className={`flex flex-col items-center p-4 h-auto ${
-							activeSchedule === key ? 'border-green-500' : ''
+							activeSchedule === key
+								? 'border-green-500 dark:border-green-400'
+								: ''
 						}`}
 						onClick={() => applySchedule(key)}
 						disabled={isGenerating}>
 						{schedule.icon}
 						<span className='mt-2 text-sm font-medium'>{schedule.name}</span>
-						<span className='text-xs text-gray-500'>
+						<span className='text-xs text-gray-500 dark:text-gray-400'>
 							{schedule.activeHours}
 						</span>
 					</Button>
@@ -284,8 +288,8 @@ const SmartAppliancesPage = () => {
 
 			{/* Loading State */}
 			{isGenerating && (
-				<div className='flex items-center justify-center py-4'>
-					<Loader2 className='w-6 h-6 animate-spin text-green-500 mr-2' />
+				<div className='flex items-center justify-center py-4 text-gray-900 dark:text-gray-100'>
+					<Loader2 className='w-6 h-6 animate-spin text-green-500 dark:text-green-400 mr-2' />
 					<span>Optimizing schedule...</span>
 				</div>
 			)}
@@ -296,32 +300,36 @@ const SmartAppliancesPage = () => {
 					<div
 						key={group}
 						className='mb-6'>
-						<h2 className='text-lg font-semibold mb-3'>{group}</h2>
+						<h2 className='text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100'>
+							{group}
+						</h2>
 						<div className='grid grid-cols-2 gap-3'>
 							{groupDevices.map((device) => {
 								const DeviceIcon = device.icon;
 								return (
-									<Sheet key={device.id}>
-										<SheetTrigger asChild>
+									<Dialog key={device.id}>
+										<DialogTrigger asChild>
 											<Card
 												className={`cursor-pointer hover:shadow-lg transition-shadow ${
-													device.status === 'active' ? 'border-green-500' : ''
+													device.status === 'active'
+														? 'border-green-500 dark:border-green-400'
+														: ''
 												}`}>
 												<CardContent className='p-4'>
 													<div className='flex flex-col items-center'>
-														<DeviceIcon className='w-8 h-8' />
-														<h3 className='mt-2 text-sm font-medium'>
+														<DeviceIcon className='w-8 h-8 text-gray-900 dark:text-gray-100' />
+														<h3 className='mt-2 text-sm font-medium text-gray-900 dark:text-gray-100'>
 															{device.name}
 														</h3>
 														<Badge
 															className={`mt-2 ${
 																device.status === 'active'
-																	? 'bg-green-500'
-																	: 'bg-gray-400'
+																	? 'bg-green-500 dark:bg-green-400'
+																	: 'bg-gray-400 dark:bg-gray-600'
 															}`}>
 															{device.status}
 														</Badge>
-														<div className='mt-2 text-xs text-gray-500'>
+														<div className='mt-2 text-xs text-gray-500 dark:text-gray-400'>
 															{device.powerDraw}W
 															{device.mode && (
 																<Badge
@@ -334,20 +342,18 @@ const SmartAppliancesPage = () => {
 													</div>
 												</CardContent>
 											</Card>
-										</SheetTrigger>
+										</DialogTrigger>
 
-										<SheetContent
-											side='bottom'
-											className='h-96'>
-											<SheetHeader>
-												<SheetTitle className='flex items-center gap-2'>
+										<DialogContent className='max-w-3xl'>
+											<DialogHeader>
+												<DialogTitle className='flex items-center gap-2 text-gray-900 dark:text-gray-100'>
 													<DeviceIcon className='w-6 h-6' />
 													<span>{device.name}</span>
-												</SheetTitle>
-											</SheetHeader>
+												</DialogTitle>
+											</DialogHeader>
 											<div className='mt-6'>
 												<div className='space-y-4'>
-													<div className='flex items-center justify-between'>
+													<div className='flex items-center justify-between text-gray-900 dark:text-gray-100'>
 														<span>Power</span>
 														<Switch
 															checked={device.status === 'active'}
@@ -363,7 +369,7 @@ const SmartAppliancesPage = () => {
 													{device.name === 'Air Conditioner' && (
 														<>
 															<div>
-																<span className='block mb-2'>
+																<span className='block mb-2 text-gray-900 dark:text-gray-100'>
 																	Temperature ({device.temperature}°C)
 																</span>
 																<Slider
@@ -379,7 +385,9 @@ const SmartAppliancesPage = () => {
 																/>
 															</div>
 															<div>
-																<span className='block mb-2'>Fan Speed</span>
+																<span className='block mb-2 text-gray-900 dark:text-gray-100'>
+																	Fan Speed
+																</span>
 																<div className='flex gap-2'>
 																	{['low', 'medium', 'high'].map((speed) => (
 																		<Button
@@ -405,7 +413,7 @@ const SmartAppliancesPage = () => {
 													{device.name === 'Smart TV' && (
 														<>
 															<div>
-																<span className='block mb-2'>
+																<span className='block mb-2 text-gray-900 dark:text-gray-100'>
 																	Volume ({device.volume}%)
 																</span>
 																<Slider
@@ -421,7 +429,7 @@ const SmartAppliancesPage = () => {
 																/>
 															</div>
 															<div>
-																<span className='block mb-2'>
+																<span className='block mb-2 text-gray-900 dark:text-gray-100'>
 																	Brightness ({device.brightness}%)
 																</span>
 																<Slider
@@ -441,7 +449,7 @@ const SmartAppliancesPage = () => {
 
 													{device.name === 'Ceiling Fan' && (
 														<div>
-															<span className='block mb-2'>
+															<span className='block mb-2 text-gray-900 dark:text-gray-100'>
 																Fan Speed ({device.speed})
 															</span>
 															<Slider
@@ -460,7 +468,7 @@ const SmartAppliancesPage = () => {
 
 													{device.name === 'Water Heater' && (
 														<div>
-															<span className='block mb-2'>
+															<span className='block mb-2 text-gray-900 dark:text-gray-100'>
 																Temperature ({device.temperature}°C)
 															</span>
 															<Slider
@@ -479,7 +487,7 @@ const SmartAppliancesPage = () => {
 
 													{device.name === 'Computer' && (
 														<div>
-															<span className='block mb-2'>
+															<span className='block mb-2 text-gray-900 dark:text-gray-100'>
 																Performance Mode
 															</span>
 															<div className='flex gap-2'>
@@ -506,7 +514,7 @@ const SmartAppliancesPage = () => {
 													)}
 												</div>
 
-												<h3 className='text-sm font-medium mb-2 mt-4'>
+												<h3 className='text-sm font-medium mb-2 mt-4 text-gray-900 dark:text-gray-100'>
 													Energy Usage - Past 24 Hours
 												</h3>
 												<div className='h-64'>
@@ -514,10 +522,22 @@ const SmartAppliancesPage = () => {
 														width='100%'
 														height='100%'>
 														<AreaChart data={energyData[device.id]}>
-															<CartesianGrid strokeDasharray='3 3' />
-															<XAxis dataKey='hour' />
-															<YAxis />
-															<Tooltip />
+															<CartesianGrid
+																strokeDasharray='3 3'
+																stroke='#374151'
+															/>
+															<XAxis
+																dataKey='hour'
+																stroke='#9CA3AF'
+															/>
+															<YAxis stroke='#9CA3AF' />
+															<Tooltip
+																contentStyle={{
+																	backgroundColor: '#1F2937',
+																	border: 'none',
+																	color: '#fff'
+																}}
+															/>
 															<Legend />
 															<Area
 																type='monotone'
@@ -540,7 +560,7 @@ const SmartAppliancesPage = () => {
 												</div>
 												<div className='mt-4'>
 													<div className='flex items-center justify-between'>
-														<div className='flex items-center gap-2'>
+														<div className='flex items-center gap-2 text-gray-900 dark:text-gray-100'>
 															<Battery className='w-4 h-4' />
 															<span className='text-lg font-bold'>
 																{device.powerDraw}W
@@ -548,14 +568,14 @@ const SmartAppliancesPage = () => {
 														</div>
 													</div>
 													{activeSchedule && (
-														<p className='text-sm text-gray-500 mt-2'>
+														<p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>
 															Part of {schedules[activeSchedule].name} schedule
 														</p>
 													)}
 												</div>
 											</div>
-										</SheetContent>
-									</Sheet>
+										</DialogContent>
+									</Dialog>
 								);
 							})}
 						</div>
@@ -654,18 +674,22 @@ const SolarSystemPage = () => {
 	};
 
 	const SolarPanelGrid = () => (
-		<div className='grid grid-cols-4 sm:grid-cols-6 gap-2 p-4 bg-gray-50 rounded-lg'>
+		<div className='grid grid-cols-4 sm:grid-cols-6 gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg'>
 			{solarPanels.panels.map((active, index) => (
 				<button
 					key={index}
 					onClick={() => togglePanel(index)}
 					className={`aspect-square rounded-lg transition-all transform hover:scale-105 ${
-						active ? 'bg-yellow-400 shadow-md' : 'bg-gray-300'
+						active
+							? 'bg-yellow-400 dark:bg-yellow-500 shadow-md'
+							: 'bg-gray-300 dark:bg-gray-600'
 					}`}>
 					<div className='w-full h-full flex items-center justify-center'>
 						<Sun
 							className={`w-6 h-6 ${
-								active ? 'text-yellow-600' : 'text-gray-500'
+								active
+									? 'text-yellow-600 dark:text-yellow-200'
+									: 'text-gray-500 dark:text-gray-400'
 							}`}
 						/>
 					</div>
@@ -680,7 +704,9 @@ const SolarSystemPage = () => {
 	const BatteryStatus = () => (
 		<Card className='p-4'>
 			<div className='flex items-center justify-between mb-4'>
-				<h3 className='text-lg font-semibold'>Battery Status</h3>
+				<h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+					Battery Status
+				</h3>
 				<Badge
 					variant={batteryPercentage > 50 ? 'default' : 'destructive'}
 					className='cursor-pointer'
@@ -697,7 +723,7 @@ const SolarSystemPage = () => {
 				</Badge>
 			</div>
 			<div
-				className='w-full bg-gray-200 rounded-full h-4 mb-4 cursor-pointer'
+				className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4 cursor-pointer'
 				onClick={(e) => {
 					const rect = e.currentTarget.getBoundingClientRect();
 					const x = e.clientX - rect.left;
@@ -709,7 +735,7 @@ const SolarSystemPage = () => {
 					}));
 				}}>
 				<div
-					className='bg-green-500 rounded-full h-4 transition-all duration-500'
+					className='bg-green-500 dark:bg-green-400 rounded-full h-4 transition-all duration-500'
 					style={{ width: `${batteryPercentage}%` }}
 				/>
 			</div>
@@ -735,7 +761,9 @@ const SolarSystemPage = () => {
 			<div className='flex flex-col sm:flex-row gap-4'>
 				<Card className='flex-1 p-4'>
 					<div className='flex justify-between items-center mb-4'>
-						<h3 className='text-lg font-semibold'>Solar Array</h3>
+						<h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+							Solar Array
+						</h3>
 						<Button
 							variant='outline'
 							className='flex items-center gap-2'
@@ -746,15 +774,19 @@ const SolarSystemPage = () => {
 					</div>
 					<SolarPanelGrid />
 					<div className='grid grid-cols-2 gap-4 mt-4'>
-						<div className='bg-gray-100 p-3 rounded'>
-							<div className='text-sm text-gray-600'>Output</div>
-							<div className='text-xl font-bold text-green-600'>
+						<div className='bg-gray-100 dark:bg-gray-800 p-3 rounded'>
+							<div className='text-sm text-gray-600 dark:text-gray-400'>
+								Output
+							</div>
+							<div className='text-xl font-bold text-green-600 dark:text-green-400'>
 								{solarPanels.currentGeneration} kW
 							</div>
 						</div>
-						<div className='bg-gray-100 p-3 rounded'>
-							<div className='text-sm text-gray-600'>Active</div>
-							<div className='text-xl font-bold'>
+						<div className='bg-gray-100 dark:bg-gray-800 p-3 rounded'>
+							<div className='text-sm text-gray-600 dark:text-gray-400'>
+								Active
+							</div>
+							<div className='text-xl font-bold text-gray-900 dark:text-gray-100'>
 								{solarPanels.activePanels}/{solarPanels.totalPanels}
 							</div>
 						</div>
@@ -766,16 +798,30 @@ const SolarSystemPage = () => {
 			</div>
 
 			<Card className='p-4'>
-				<h3 className='text-lg font-semibold mb-4'>Power Overview</h3>
+				<h3 className='text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100'>
+					Power Overview
+				</h3>
 				<div className='h-64'>
 					<ResponsiveContainer
 						width='100%'
 						height='100%'>
 						<AreaChart data={solarData}>
-							<CartesianGrid strokeDasharray='3 3' />
-							<XAxis dataKey='hour' />
-							<YAxis />
-							<Tooltip />
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#374151'
+							/>
+							<XAxis
+								dataKey='hour'
+								stroke='#9CA3AF'
+							/>
+							<YAxis stroke='#9CA3AF' />
+							<Tooltip
+								contentStyle={{
+									backgroundColor: '#1F2937',
+									border: 'none',
+									color: '#fff'
+								}}
+							/>
 							<Legend />
 							<Area
 								type='monotone'
@@ -803,8 +849,10 @@ const SolarSystemPage = () => {
 					<div className='flex items-center gap-2'>
 						<Sun className='w-6 h-6 text-yellow-500' />
 						<div>
-							<div className='text-sm text-gray-600'>Capacity</div>
-							<div className='text-xl font-bold'>
+							<div className='text-sm text-gray-600 dark:text-gray-400'>
+								Capacity
+							</div>
+							<div className='text-xl font-bold text-gray-900 dark:text-gray-100'>
 								{solarPanels.totalCapacity} kW
 							</div>
 						</div>
@@ -812,10 +860,12 @@ const SolarSystemPage = () => {
 				</Card>
 				<Card className='p-4'>
 					<div className='flex items-center gap-2'>
-						<BatteryCharging className='w-6 h-6 text-green-500' />
+						<BatteryCharging className='w-6 h-6 text-green-500 dark:text-green-400' />
 						<div>
-							<div className='text-sm text-gray-600'>Storage</div>
-							<div className='text-xl font-bold'>
+							<div className='text-sm text-gray-600 dark:text-gray-400'>
+								Storage
+							</div>
+							<div className='text-xl font-bold text-gray-900 dark:text-gray-100'>
 								{batterySystem.currentCharge} kWh
 							</div>
 						</div>
@@ -823,10 +873,12 @@ const SolarSystemPage = () => {
 				</Card>
 				<Card className='p-4'>
 					<div className='flex items-center gap-2'>
-						<Zap className='w-6 h-6 text-blue-500' />
+						<Zap className='w-6 h-6 text-blue-500 dark:text-blue-400' />
 						<div>
-							<div className='text-sm text-gray-600'>Charging</div>
-							<div className='text-xl font-bold'>
+							<div className='text-sm text-gray-600 dark:text-gray-400'>
+								Charging
+							</div>
+							<div className='text-xl font-bold text-gray-900 dark:text-gray-100'>
 								{batterySystem.chargingRate} kW
 							</div>
 						</div>
@@ -839,7 +891,7 @@ const SolarSystemPage = () => {
 
 const SmartHomeDashboard = () => {
 	return (
-		<div className='min-h-screen bg-gray-50 p-4'>
+		<div className='min-h-screen p-4'>
 			<div className='max-w-7xl mx-auto'>
 				<h1 className='text-3xl font-bold mb-6'>Smart Home Dashboard</h1>
 

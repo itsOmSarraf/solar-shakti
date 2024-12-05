@@ -194,6 +194,8 @@ export function LiveEnergyRates() {
 							<CartesianGrid
 								strokeDasharray='3 3'
 								vertical={false}
+								stroke='currentColor'
+								opacity={0.1}
 							/>
 							<XAxis
 								dataKey='time'
@@ -201,6 +203,7 @@ export function LiveEnergyRates() {
 								axisLine={false}
 								tickMargin={8}
 								minTickGap={40}
+								stroke='currentColor'
 								tickFormatter={(value) => {
 									const date = new Date(value);
 									return date.toLocaleTimeString('en-US', {
@@ -213,6 +216,7 @@ export function LiveEnergyRates() {
 								tickLine={false}
 								axisLine={false}
 								tickMargin={8}
+								stroke='currentColor'
 								tickFormatter={(value) => `₹${value.toFixed(1)}`}
 							/>
 							<ChartTooltip

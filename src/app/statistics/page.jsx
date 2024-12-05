@@ -51,14 +51,16 @@ export default function EnergyDashboard() {
 	};
 
 	return (
-		<div className='bg-gray-50/50'>
+		<div className='bg-gray-50/50 dark:bg-gray-900/50'>
 			{/* Header Section */}
-			<div className='bg-white border-b'>
+			<div className='bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700'>
 				<div className='px-3 py-2'>
 					<div className='flex flex-col sm:flex-row justify-between gap-2 items-start sm:items-center max-w-[1800px] mx-auto'>
 						{/* Left side */}
 						<div className='flex items-center gap-2'>
-							<h1 className='text-xl font-bold'>Energy Dashboard</h1>
+							<h1 className='text-xl font-bold text-gray-900 dark:text-white'>
+								Energy Dashboard
+							</h1>
 							<Badge
 								variant={
 									systemStatus.status === 'optimal' ? 'success' : 'warning'
@@ -75,9 +77,9 @@ export default function EnergyDashboard() {
 						<div className='flex items-center gap-2 ml-auto'>
 							<Badge
 								variant='outline'
-								className='flex items-center gap-1.5 px-2 py-0.5'>
+								className='flex items-center gap-1.5 px-2 py-0.5 dark:border-gray-600'>
 								<Zap className='w-3.5 h-3.5 text-amber-500' />
-								<span className='text-sm'>
+								<span className='text-sm dark:text-gray-200'>
 									Solar Efficiency: {systemStatus.solarEfficiency}%
 								</span>
 							</Badge>
@@ -94,7 +96,6 @@ export default function EnergyDashboard() {
 				</div>
 
 				{/* Tabs Navigation and Content */}
-				{/* <div className='w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60'> */}
 				<div className='w-full flex mx-auto px-3'>
 					<Tabs
 						defaultValue='statistics'
@@ -105,14 +106,16 @@ export default function EnergyDashboard() {
 								value='statistics'
 								className={`relative flex items-center gap-1.5 px-4 py-2 transition-all ${
 									activeTab === 'statistics'
-										? 'text-green-600'
-										: 'text-gray-500'
+										? 'text-green-600 dark:text-green-400'
+										: 'text-gray-500 dark:text-gray-400'
 								}`}>
 								<BarChart2 className='w-4 h-4' />
 								<span className='text-sm font-medium'>Statistics</span>
 								<div
 									className={`absolute -bottom-px left-0 right-0 h-0.5 ${
-										activeTab === 'statistics' ? 'bg-green-600' : 'hidden'
+										activeTab === 'statistics'
+											? 'bg-green-600 dark:bg-green-400'
+											: 'hidden'
 									}`}
 								/>
 							</TabsTrigger>
@@ -120,19 +123,21 @@ export default function EnergyDashboard() {
 								value='predictions'
 								className={`relative flex items-center gap-1.5 px-4 py-2 transition-all ${
 									activeTab === 'predictions'
-										? 'text-blue-600'
-										: 'text-gray-500'
+										? 'text-blue-600 dark:text-blue-400'
+										: 'text-gray-500 dark:text-gray-400'
 								}`}>
 								<BrainCircuit className='w-4 h-4' />
 								<span className='text-sm font-medium'>AI Predictions</span>
 								<div
 									className={`absolute -bottom-px left-0 right-0 h-0.5 ${
-										activeTab === 'predictions' ? 'bg-blue-600' : 'hidden'
+										activeTab === 'predictions'
+											? 'bg-blue-600 dark:bg-blue-400'
+											: 'hidden'
 									}`}
 								/>
 								<Badge
 									variant='secondary'
-									className='ml-1.5 bg-blue-50 text-blue-700 px-1.5 py-0.5 text-xs'>
+									className='ml-1.5 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-200 px-1.5 py-0.5 text-xs'>
 									AI
 								</Badge>
 							</TabsTrigger>
@@ -167,7 +172,6 @@ export default function EnergyDashboard() {
 							</Suspense>
 						</main>
 					</Tabs>
-					{/* </div> */}
 				</div>
 			</div>
 		</div>
