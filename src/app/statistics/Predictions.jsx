@@ -541,25 +541,6 @@ const PredictionsPage = () => {
 			<div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4'>
 				<h1 className='text-xl md:text-2xl font-bold'>AI Energy Predictions</h1>
 				<div className='flex flex-wrap items-center gap-2'>
-					<Badge
-						variant='outline'
-						className='flex items-center gap-1'>
-						<BrainCircuit className='w-4 h-4' />
-						{selectedDay === 1
-							? '92.5%'
-							: selectedDay === 2
-							? '91.8%'
-							: selectedDay === 3
-							? '93.2%'
-							: selectedDay === 4
-							? '92.1%'
-							: selectedDay === 5
-							? '91.9%'
-							: selectedDay === 6
-							? '92.7%'
-							: '92.3%'}{' '}
-						Accuracy
-					</Badge>
 					<Select
 						value={String(selectedDay)}
 						onValueChange={(value) => {
