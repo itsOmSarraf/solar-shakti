@@ -4,6 +4,17 @@ const withPWA = withPWAInit({
 	dest: 'public'
 });
 
-// /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'raw.githubusercontent.com',
+				pathname: '/**'
+			}
+		]
+	}
+};
 
-export default withPWA();
+export default withPWA(nextConfig);

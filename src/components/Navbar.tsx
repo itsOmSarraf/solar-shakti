@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import Logo from "@/public/icons/icon.png"
 import { APP_NAME } from '@/lib/constants'
 import { WeatherWidget } from "./WeatherWidget"
 
@@ -38,10 +37,12 @@ export function Navbar() {
                     className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                 >
                     <Image
-                        src={Logo}
+                        src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png?token=GHSAT0AAAAAACZAJDMFHGVZY2LXQ6M3EKQEZ2SAHBQ"
                         alt={APP_NAME}
                         className="size-8 rounded-lg"
                         priority
+                        width={32}
+                        height={32}
                     />
                     <span className="font-semibold text-xl tracking-tight text-gray-900 dark:text-gray-100">
                         {APP_NAME}
