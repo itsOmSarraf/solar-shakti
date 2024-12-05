@@ -3,7 +3,7 @@
 > Empowering homes with intelligent solar energy management
 
 <div align="center">
-  <img src="https://imgur.com/a/ajD6moO" alt="Solar Shakti Logo" width="200"/>
+  <img src="https://i.imgur.com/yFhIoNr.png" alt="Solar Shakti Logo" width="200"/>
 </div>
 
 ## About Solar Shakti
@@ -85,8 +85,7 @@ Made with ❤️ by BeanBagCoders:
 
 ## 🔗 Links
 - [Live Demo](https://solar-shakti.vercel.app/)
-- [Download App](#)
-- [Documentation](#)
+- [Documentation](https://github.com/itsOmSarraf/solar-shakti)
 
 ---
 
