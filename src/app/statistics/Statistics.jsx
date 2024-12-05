@@ -105,6 +105,838 @@ const MetricBox = ({ icon: Icon, label, value, trend, color, subValue }) => (
 	</Card>
 );
 
+// Real-time Energy Flow Component
+const RealTimeEnergyFlow = ({ liveData }) => {
+	const [showDetailedView, setShowDetailedView] = useState(false);
+	const [activeTab, setActiveTab] = useState('daily');
+
+	const generateDailyData = () => {
+		return Array.from({ length: 24 }, (_, i) => ({
+			hour: `${String(i).padStart(2, '0')}:00`,
+			solar: Math.max(
+				0,
+				50 + Math.random() * 30 * Math.sin((Math.PI * (i - 6)) / 12)
+			),
+			grid: 20 + Math.random() * 15,
+			consumption: 30 + Math.random() * 25
+		}));
+	};
+
+	const generateWeeklyData = () => {
+		const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		return days.map((day) => ({
+			day,
+			solar: Math.floor(200 + Math.random() * 100),
+			grid: Math.floor(150 + Math.random() * 80),
+			consumption: Math.floor(300 + Math.random() * 150)
+		}));
+	};
+
+	const generateMonthlyData = () => {
+		return Array.from({ length: 30 }, (_, i) => ({
+			date: i + 1,
+			solar: Math.floor(180 + Math.random() * 120),
+			grid: Math.floor(140 + Math.random() * 90),
+			consumption: Math.floor(280 + Math.random() * 160)
+		}));
+	};
+
+	const generateYearlyData = () => {
+		const months = [
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec'
+		];
+		return months.map((month) => ({
+			month,
+			solar: Math.floor(2200 + Math.random() * 800),
+			grid: Math.floor(1800 + Math.random() * 600),
+			consumption: Math.floor(3500 + Math.random() * 1000)
+		}));
+	};
+
+	const [detailedData] = useState({
+		daily: generateDailyData(),
+		weekly: generateWeeklyData(),
+		monthly: generateMonthlyData(),
+		yearly: generateYearlyData()
+	});
+
+	return (
+		<>
+			<Card
+				className='w-full cursor-pointer'
+				onClick={() => setShowDetailedView(true)}>
+				<CardHeader>
+					<CardTitle className='text-gray-900 dark:text-gray-100'>
+						Real-time Energy Flow
+					</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<LineChart data={liveData}>
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb dark:stroke-gray-700'
+							/>
+							<XAxis
+								dataKey='time'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip content={<CustomTooltip />} />
+							<Legend />
+							<Line
+								type='monotone'
+								dataKey='solar'
+								stroke='#f59e0b'
+								name='Solar'
+								dot={false}
+							/>
+							<Line
+								type='monotone'
+								dataKey='grid'
+								stroke='#3b82f6'
+								name='Grid'
+								dot={false}
+							/>
+							<Line
+								type='monotone'
+								dataKey='consumption'
+								stroke='#ef4444'
+								name='Consumption'
+								dot={false}
+							/>
+						</LineChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{showDetailedView && (
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 md:p-6'>
+					<div className='bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg w-full md:w-[80vw] h-[90vh] md:h-[80vh] overflow-y-auto'>
+						<div className='flex justify-between mb-4 sticky top-0 bg-white dark:bg-gray-800 py-2'>
+							<h2 className='text-xl md:text-2xl font-bold text-gray-900 dark:text-white'>
+								Detailed Energy Flow
+							</h2>
+							<button
+								onClick={() => setShowDetailedView(false)}
+								className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'>
+								✕
+							</button>
+						</div>
+
+						<div className='flex flex-wrap gap-2 md:gap-4 mb-4 overflow-x-auto'>
+							{['daily', 'weekly', 'monthly', 'yearly'].map((tab) => (
+								<button
+									key={tab}
+									onClick={() => setActiveTab(tab)}
+									className={`px-3 py-1.5 md:px-4 md:py-2 rounded text-sm md:text-base whitespace-nowrap ${
+										activeTab === tab
+											? 'bg-blue-500 text-white'
+											: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+									}`}>
+									{tab.charAt(0).toUpperCase() + tab.slice(1)}
+								</button>
+							))}
+						</div>
+
+						<div className='h-[60vh] md:h-[calc(80vh-200px)]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<LineChart data={detailedData[activeTab]}>
+									<CartesianGrid strokeDasharray='3 3' />
+									<XAxis
+										dataKey={
+											activeTab === 'daily'
+												? 'hour'
+												: activeTab === 'weekly'
+												? 'day'
+												: activeTab === 'monthly'
+												? 'date'
+												: 'month'
+										}
+									/>
+									<YAxis />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Line
+										type='monotone'
+										dataKey='solar'
+										stroke='#f59e0b'
+										name='Solar'
+									/>
+									<Line
+										type='monotone'
+										dataKey='grid'
+										stroke='#3b82f6'
+										name='Grid'
+									/>
+									<Line
+										type='monotone'
+										dataKey='consumption'
+										stroke='#ef4444'
+										name='Consumption'
+									/>
+								</LineChart>
+							</ResponsiveContainer>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
+	);
+};
+
+// Carbon Emissions Component
+const CarbonEmissions = ({ carbonData }) => (
+	<Card className='w-full'>
+		<CardHeader>
+			<CardTitle className='text-gray-900 dark:text-white'>
+				Carbon Emissions Reduction
+			</CardTitle>
+		</CardHeader>
+		<CardContent className='h-[400px]'>
+			<ResponsiveContainer
+				width='100%'
+				height='100%'>
+				<AreaChart data={carbonData}>
+					<CartesianGrid
+						strokeDasharray='3 3'
+						stroke='#e5e7eb'
+					/>
+					<XAxis
+						dataKey='month'
+						stroke='#4b5563'
+					/>
+					<YAxis stroke='#4b5563' />
+					<Tooltip content={<CustomTooltip />} />
+					<Legend />
+					<Area
+						type='monotone'
+						dataKey='baseline'
+						stroke='#ef4444'
+						fill='#fee2e2'
+						name='Baseline Emissions'
+					/>
+					<Area
+						type='monotone'
+						dataKey='reduced'
+						stroke='#10b981'
+						fill='#d1fae5'
+						name='Reduced Emissions'
+					/>
+				</AreaChart>
+			</ResponsiveContainer>
+		</CardContent>
+	</Card>
+);
+
+// Cost Analysis Component
+const CostAnalysis = ({ costData }) => {
+	const [showDetailedView, setShowDetailedView] = useState(false);
+	const [activeTab, setActiveTab] = useState('daily');
+
+	// Generate random data for different time periods
+	const generateDailyData = () => {
+		return Array.from({ length: 24 }, (_, i) => ({
+			time: `${String(i).padStart(2, '0')}:00`,
+			withSolar: Math.floor(100 + Math.random() * 50),
+			withoutSolar: Math.floor(200 + Math.random() * 100)
+		}));
+	};
+
+	const generateWeeklyData = () => {
+		const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		return Array.from({ length: 7 }, (_, i) => ({
+			day: days[i],
+			withSolar: Math.floor(800 + Math.random() * 200),
+			withoutSolar: Math.floor(1500 + Math.random() * 300)
+		}));
+	};
+
+	const generateMonthlyData = () => {
+		return Array.from({ length: 30 }, (_, i) => ({
+			date: i + 1,
+			withSolar: Math.floor(2000 + Math.random() * 500),
+			withoutSolar: Math.floor(3500 + Math.random() * 1000)
+		}));
+	};
+
+	const generateYearlyData = () => {
+		const months = [
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec'
+		];
+		return Array.from({ length: 12 }, (_, i) => ({
+			month: months[i],
+			withSolar: Math.floor(25000 + Math.random() * 5000),
+			withoutSolar: Math.floor(45000 + Math.random() * 10000)
+		}));
+	};
+
+	const [detailedData, setDetailedData] = useState({
+		daily: generateDailyData(),
+		weekly: generateWeeklyData(),
+		monthly: generateMonthlyData(),
+		yearly: generateYearlyData()
+	});
+
+	const handleCardClick = () => {
+		setShowDetailedView(true);
+	};
+
+	return (
+		<>
+			<Card
+				className='cursor-pointer w-full'
+				onClick={handleCardClick}>
+				<CardHeader>
+					<CardTitle className='text-gray-900 dark:text-gray-100'>
+						Cost Comparison
+					</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<BarChart data={costData}>
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb dark:stroke-gray-700'
+							/>
+							<XAxis
+								dataKey='month'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip content={<CustomTooltip />} />
+							<Legend />
+							<Bar
+								dataKey='withoutSolar'
+								fill='#ef4444'
+								name='Without Solar'
+							/>
+							<Bar
+								dataKey='withSolar'
+								fill='#10b981'
+								name='With Solar'
+							/>
+						</BarChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{showDetailedView && (
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 md:p-0'>
+					<div className='bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg w-full md:w-[80vw] h-[90vh] md:h-[80vh] overflow-y-auto'>
+						<div className='flex justify-between mb-4 sticky top-0 bg-white dark:bg-gray-800 py-2'>
+							<h2 className='text-xl md:text-2xl font-bold text-gray-900 dark:text-white'>
+								Detailed Cost Analysis
+							</h2>
+							<button
+								onClick={() => setShowDetailedView(false)}
+								className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2'>
+								✕
+							</button>
+						</div>
+
+						<div className='flex flex-wrap gap-2 md:gap-4 mb-4 overflow-x-auto'>
+							{['daily', 'weekly', 'monthly', 'yearly'].map((tab) => (
+								<button
+									key={tab}
+									onClick={() => setActiveTab(tab)}
+									className={`px-3 py-1.5 md:px-4 md:py-2 rounded text-sm md:text-base whitespace-nowrap ${
+										activeTab === tab
+											? 'bg-blue-500 text-white'
+											: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+									}`}>
+									{tab.charAt(0).toUpperCase() + tab.slice(1)}
+								</button>
+							))}
+						</div>
+
+						<div className='h-[60vh] md:h-[calc(80vh-200px)]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<BarChart data={detailedData[activeTab]}>
+									<CartesianGrid
+										strokeDasharray='3 3'
+										stroke='#e5e7eb'
+									/>
+									<XAxis
+										dataKey={
+											activeTab === 'daily'
+												? 'time'
+												: activeTab === 'weekly'
+												? 'day'
+												: activeTab === 'monthly'
+												? 'date'
+												: 'month'
+										}
+										stroke='#4b5563'
+									/>
+									<YAxis stroke='#4b5563' />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Bar
+										dataKey='withoutSolar'
+										fill='#ef4444'
+										name='Without Solar'
+									/>
+									<Bar
+										dataKey='withSolar'
+										fill='#10b981'
+										name='With Solar'
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
+	);
+};
+
+// Weather Impact Component
+const WeatherImpact = ({ weatherImpactData }) => (
+	<Card className='w-full'>
+		<CardHeader>
+			<CardTitle className='text-gray-900 dark:text-gray-100'>
+				Weather Impact on Solar Generation
+			</CardTitle>
+		</CardHeader>
+		<CardContent className='h-[400px]'>
+			<ResponsiveContainer
+				width='100%'
+				height='100%'>
+				<BarChart data={weatherImpactData}>
+					<CartesianGrid
+						strokeDasharray='3 3'
+						stroke='#e5e7eb dark:stroke-gray-700'
+					/>
+					<XAxis
+						dataKey='name'
+						stroke='#4b5563'
+					/>
+					<YAxis stroke='#4b5563' />
+					<Tooltip content={<CustomTooltip />} />
+					<Legend />
+					<Bar
+						dataKey='sunny'
+						fill='#f59e0b'
+						name='Sunny'
+					/>
+					<Bar
+						dataKey='cloudy'
+						fill='#94a3b8'
+						name='Cloudy'
+					/>
+					<Bar
+						dataKey='rainy'
+						fill='#3b82f6'
+						name='Rainy'
+					/>
+				</BarChart>
+			</ResponsiveContainer>
+		</CardContent>
+	</Card>
+);
+
+// Energy Distribution Component
+const EnergyDistribution = ({ distributionData }) => {
+	const [showDetailedView, setShowDetailedView] = useState(false);
+	const [activeTab, setActiveTab] = useState('daily');
+
+	// Generate random data for different time periods
+	const generateDailyData = () => {
+		return Array.from({ length: 24 }, (_, i) => ({
+			hour: `${String(i).padStart(2, '0')}:00`,
+			solar: Math.floor(40 + Math.random() * 30),
+			grid: Math.floor(20 + Math.random() * 20),
+			battery: Math.floor(10 + Math.random() * 25)
+		}));
+	};
+
+	const generateWeeklyData = () => {
+		const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		return days.map((day) => ({
+			day,
+			solar: Math.floor(35 + Math.random() * 35),
+			grid: Math.floor(15 + Math.random() * 25),
+			battery: Math.floor(15 + Math.random() * 20)
+		}));
+	};
+
+	const generateMonthlyData = () => {
+		return Array.from({ length: 30 }, (_, i) => ({
+			date: `Day ${i + 1}`,
+			solar: Math.floor(30 + Math.random() * 40),
+			grid: Math.floor(20 + Math.random() * 20),
+			battery: Math.floor(10 + Math.random() * 30)
+		}));
+	};
+
+	const generateYearlyData = () => {
+		const months = [
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec'
+		];
+		return months.map((month) => ({
+			month,
+			solar: Math.floor(25 + Math.random() * 45),
+			grid: Math.floor(15 + Math.random() * 25),
+			battery: Math.floor(15 + Math.random() * 25)
+		}));
+	};
+
+	const detailedData = {
+		daily: generateDailyData(),
+		weekly: generateWeeklyData(),
+		monthly: generateMonthlyData(),
+		yearly: generateYearlyData()
+	};
+
+	return (
+		<Card className='w-full'>
+			<CardHeader>
+				<CardTitle className='text-gray-900 dark:text-gray-100'>
+					Energy Source Distribution
+				</CardTitle>
+			</CardHeader>
+			<CardContent
+				className='h-[400px] cursor-pointer'
+				onClick={() => setShowDetailedView(true)}>
+				<ResponsiveContainer
+					width='100%'
+					height='100%'>
+					<PieChart>
+						<Pie
+							data={distributionData}
+							cx='50%'
+							cy='50%'
+							innerRadius={60}
+							outerRadius={80}
+							paddingAngle={5}
+							dataKey='value'
+						/>
+						<Tooltip content={<CustomTooltip />} />
+						<Legend />
+					</PieChart>
+				</ResponsiveContainer>
+			</CardContent>
+
+			{showDetailedView && (
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 md:p-6'>
+					<div className='bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg w-full md:w-[80vw] h-[90vh] md:h-[80vh] overflow-y-auto'>
+						<div className='flex justify-between mb-4 sticky top-0 bg-white dark:bg-gray-800 py-2'>
+							<h2 className='text-xl md:text-2xl font-bold text-gray-900 dark:text-white'>
+								Detailed Energy Distribution
+							</h2>
+							<button
+								onClick={() => setShowDetailedView(false)}
+								className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'>
+								✕
+							</button>
+						</div>
+
+						<div className='flex flex-wrap gap-2 md:gap-4 mb-4 overflow-x-auto'>
+							{['daily', 'weekly', 'monthly', 'yearly'].map((tab) => (
+								<button
+									key={tab}
+									onClick={() => setActiveTab(tab)}
+									className={`px-3 py-1.5 md:px-4 md:py-2 rounded text-sm md:text-base whitespace-nowrap ${
+										activeTab === tab
+											? 'bg-blue-500 text-white'
+											: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+									}`}>
+									{tab.charAt(0).toUpperCase() + tab.slice(1)}
+								</button>
+							))}
+						</div>
+
+						<div className='h-[60vh] md:h-[calc(80vh-200px)]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<BarChart data={detailedData[activeTab]}>
+									<CartesianGrid strokeDasharray='3 3' />
+									<XAxis
+										dataKey={
+											activeTab === 'daily'
+												? 'hour'
+												: activeTab === 'weekly'
+												? 'day'
+												: activeTab === 'monthly'
+												? 'date'
+												: 'month'
+										}
+									/>
+									<YAxis />
+									<Tooltip content={<CustomTooltip />} />
+									<Legend />
+									<Bar
+										dataKey='solar'
+										fill='#f59e0b'
+										name='Solar'
+									/>
+									<Bar
+										dataKey='grid'
+										fill='#3b82f6'
+										name='Grid'
+									/>
+									<Bar
+										dataKey='battery'
+										fill='#10b981'
+										name='Battery'
+									/>
+								</BarChart>
+							</ResponsiveContainer>
+						</div>
+					</div>
+				</div>
+			)}
+		</Card>
+	);
+};
+
+// Peak Usage Component
+const PeakUsage = ({ peakUsageData }) => (
+	<Card className='w-full'>
+		<CardHeader>
+			<CardTitle className='text-gray-900 dark:text-gray-100'>
+				Peak Usage Times
+			</CardTitle>
+		</CardHeader>
+		<CardContent className='h-[400px]'>
+			<ResponsiveContainer
+				width='100%'
+				height='100%'>
+				<RadialBarChart
+					cx='50%'
+					cy='50%'
+					innerRadius='20%'
+					outerRadius='80%'
+					data={peakUsageData}
+					startAngle={180}
+					endAngle={0}>
+					<RadialBar
+						minAngle={15}
+						background
+						clockWise={true}
+						dataKey='value'
+					/>
+					<Legend />
+					<Tooltip content={<CustomTooltip />} />
+				</RadialBarChart>
+			</ResponsiveContainer>
+		</CardContent>
+	</Card>
+);
+
+// System Efficiency Component
+const SystemEfficiency = ({ efficiencyData }) => {
+	const [showDetailedView, setShowDetailedView] = useState(false);
+	const [activeTab, setActiveTab] = useState('daily');
+
+	// Generate random data for different time periods
+	const generateDailyData = () => {
+		return Array.from({ length: 24 }, (_, i) => ({
+			hour: `${String(i).padStart(2, '0')}:00`,
+			efficiency: Math.floor(75 + Math.random() * 20)
+		}));
+	};
+
+	const generateWeeklyData = () => {
+		const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		return Array.from({ length: 7 }, (_, i) => ({
+			day: days[i],
+			efficiency: Math.floor(70 + Math.random() * 25)
+		}));
+	};
+
+	const generateMonthlyData = () => {
+		return Array.from({ length: 30 }, (_, i) => ({
+			date: i + 1,
+			efficiency: Math.floor(65 + Math.random() * 30)
+		}));
+	};
+
+	const generateYearlyData = () => {
+		const months = [
+			'Jan',
+			'Feb',
+			'Mar',
+			'Apr',
+			'May',
+			'Jun',
+			'Jul',
+			'Aug',
+			'Sep',
+			'Oct',
+			'Nov',
+			'Dec'
+		];
+		return Array.from({ length: 12 }, (_, i) => ({
+			month: months[i],
+			efficiency: Math.floor(60 + Math.random() * 35)
+		}));
+	};
+
+	const [detailedData, setDetailedData] = useState({
+		daily: generateDailyData(),
+		weekly: generateWeeklyData(),
+		monthly: generateMonthlyData(),
+		yearly: generateYearlyData()
+	});
+
+	const handleCardClick = () => {
+		setShowDetailedView(true);
+	};
+
+	return (
+		<>
+			<Card
+				className='cursor-pointer'
+				onClick={handleCardClick}>
+				<CardHeader>
+					<CardTitle className='text-gray-900 dark:text-white'>
+						24-Hour System Efficiency
+					</CardTitle>
+				</CardHeader>
+				<CardContent className='h-[400px]'>
+					<ResponsiveContainer
+						width='100%'
+						height='100%'>
+						<AreaChart data={efficiencyData}>
+							<CartesianGrid
+								strokeDasharray='3 3'
+								stroke='#e5e7eb'
+							/>
+							<XAxis
+								dataKey='hour'
+								stroke='#4b5563'
+							/>
+							<YAxis stroke='#4b5563' />
+							<Tooltip content={<CustomTooltip />} />
+							<Area
+								type='monotone'
+								dataKey='efficiency'
+								stroke='#10b981'
+								fill='#d1fae5'
+								name='Efficiency %'
+							/>
+						</AreaChart>
+					</ResponsiveContainer>
+				</CardContent>
+			</Card>
+
+			{showDetailedView && (
+				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 md:p-0'>
+					<div className='bg-white dark:bg-gray-800 p-4 md:p-6 rounded-lg w-full md:w-[80vw] h-[90vh] md:h-[80vh] overflow-y-auto'>
+						<div className='flex justify-between mb-4 sticky top-0 bg-white dark:bg-gray-800 py-2'>
+							<h2 className='text-xl md:text-2xl font-bold text-gray-900 dark:text-white'>
+								Detailed System Efficiency
+							</h2>
+							<button
+								onClick={() => setShowDetailedView(false)}
+								className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2'>
+								✕
+							</button>
+						</div>
+
+						<div className='flex flex-wrap gap-2 md:gap-4 mb-4 overflow-x-auto'>
+							{['daily', 'weekly', 'monthly', 'yearly'].map((tab) => (
+								<button
+									key={tab}
+									onClick={() => setActiveTab(tab)}
+									className={`px-3 py-1.5 md:px-4 md:py-2 rounded text-sm md:text-base whitespace-nowrap ${
+										activeTab === tab
+											? 'bg-blue-500 text-white'
+											: 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+									}`}>
+									{tab.charAt(0).toUpperCase() + tab.slice(1)}
+								</button>
+							))}
+						</div>
+
+						<div className='h-[60vh] md:h-[calc(80vh-200px)]'>
+							<ResponsiveContainer
+								width='100%'
+								height='100%'>
+								<AreaChart
+									data={detailedData[activeTab]}
+									margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+									<CartesianGrid strokeDasharray='3 3' />
+									<XAxis
+										dataKey={
+											activeTab === 'daily'
+												? 'hour'
+												: activeTab === 'weekly'
+												? 'day'
+												: activeTab === 'monthly'
+												? 'date'
+												: 'month'
+										}
+										tick={{ fontSize: 12 }}
+										interval={'preserveStartEnd'}
+									/>
+									<YAxis
+										tick={{ fontSize: 12 }}
+										width={30}
+									/>
+									<Tooltip content={<CustomTooltip />} />
+									<Area
+										type='monotone'
+										dataKey='efficiency'
+										stroke='#10b981'
+										fill='#d1fae5'
+										name='Efficiency %'
+									/>
+								</AreaChart>
+							</ResponsiveContainer>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
+	);
+};
+
 const EnergyStatisticsExpanded = () => {
 	// Generate real-time energy data
 	const [liveData, setLiveData] = useState(() =>
@@ -257,96 +1089,8 @@ const EnergyStatisticsExpanded = () => {
 				<div
 					className='flex gap-4 pb-4'
 					style={{ width: '200%' }}>
-					{/* Real-time Energy Flow */}
-					<Card className='w-full'>
-						<CardHeader>
-							<CardTitle className='text-gray-900 dark:text-gray-100'>
-								Real-time Energy Flow
-							</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<LineChart data={liveData}>
-									<CartesianGrid
-										strokeDasharray='3 3'
-										stroke='#e5e7eb dark:stroke-gray-700'
-									/>
-									<XAxis
-										dataKey='time'
-										stroke='#4b5563'
-									/>
-									<YAxis stroke='#4b5563' />
-									<Tooltip content={<CustomTooltip />} />
-									<Legend />
-									<Line
-										type='monotone'
-										dataKey='solar'
-										stroke='#f59e0b'
-										name='Solar'
-										dot={false}
-									/>
-									<Line
-										type='monotone'
-										dataKey='grid'
-										stroke='#3b82f6'
-										name='Grid'
-										dot={false}
-									/>
-									<Line
-										type='monotone'
-										dataKey='consumption'
-										stroke='#ef4444'
-										name='Consumption'
-										dot={false}
-									/>
-								</LineChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
-
-					{/* Carbon Emissions Impact */}
-					<Card className='w-full'>
-						<CardHeader>
-							<CardTitle className='text-gray-900 dark:text-white'>
-								Carbon Emissions Reduction
-							</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<AreaChart data={carbonData}>
-									<CartesianGrid
-										strokeDasharray='3 3'
-										stroke='#e5e7eb'
-									/>
-									<XAxis
-										dataKey='month'
-										stroke='#4b5563'
-									/>
-									<YAxis stroke='#4b5563' />
-									<Tooltip content={<CustomTooltip />} />
-									<Legend />
-									<Area
-										type='monotone'
-										dataKey='baseline'
-										stroke='#ef4444'
-										fill='#fee2e2'
-										name='Baseline Emissions'
-									/>
-									<Area
-										type='monotone'
-										dataKey='reduced'
-										stroke='#10b981'
-										fill='#d1fae5'
-										name='Reduced Emissions'
-									/>
-								</AreaChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
+					<RealTimeEnergyFlow liveData={liveData} />
+					<CarbonEmissions carbonData={carbonData} />
 				</div>
 			</ScrollArea>
 
@@ -355,86 +1099,8 @@ const EnergyStatisticsExpanded = () => {
 				<div
 					className='flex gap-4 pb-4'
 					style={{ width: '200%' }}>
-					{/* Cost Analysis */}
-					<Card className='w-full'>
-						<CardHeader>
-							<CardTitle className='text-gray-900 dark:text-gray-100'>
-								Cost Comparison
-							</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<BarChart data={costData}>
-									<CartesianGrid
-										strokeDasharray='3 3'
-										stroke='#e5e7eb dark:stroke-gray-700'
-									/>
-									<XAxis
-										dataKey='month'
-										stroke='#4b5563'
-									/>
-									<YAxis stroke='#4b5563' />
-									<Tooltip content={<CustomTooltip />} />
-									<Legend />
-									<Bar
-										dataKey='withoutSolar'
-										fill='#ef4444'
-										name='Without Solar'
-									/>
-									<Bar
-										dataKey='withSolar'
-										fill='#10b981'
-										name='With Solar'
-									/>
-								</BarChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
-
-					{/* Weather Impact */}
-					<Card className='w-full'>
-						<CardHeader>
-							<CardTitle className='text-gray-900 dark:text-gray-100'>
-								Weather Impact on Solar Generation
-							</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<BarChart data={weatherImpactData}>
-									<CartesianGrid
-										strokeDasharray='3 3'
-										stroke='#e5e7eb dark:stroke-gray-700'
-									/>
-									<XAxis
-										dataKey='day'
-										stroke='#4b5563'
-									/>
-									<YAxis stroke='#4b5563' />
-									<Tooltip content={<CustomTooltip />} />
-									<Legend />
-									<Bar
-										dataKey='sunny'
-										fill='#f59e0b'
-										name='Sunny'
-									/>
-									<Bar
-										dataKey='cloudy'
-										fill='#94a3b8'
-										name='Cloudy'
-									/>
-									<Bar
-										dataKey='rainy'
-										fill='#3b82f6'
-										name='Rainy'
-									/>
-								</BarChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
+					<CostAnalysis costData={costData} />
+					<WeatherImpact weatherImpactData={weatherImpactData} />
 				</div>
 			</ScrollArea>
 
@@ -443,101 +1109,13 @@ const EnergyStatisticsExpanded = () => {
 				<div
 					className='flex gap-4 pb-4'
 					style={{ width: '200%' }}>
-					{/* Energy Source Distribution */}
-					<Card className='w-full'>
-						<CardHeader>
-							<CardTitle className='text-gray-900 dark:text-gray-100'>
-								Energy Source Distribution
-							</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<PieChart>
-									<Pie
-										data={distributionData}
-										cx='50%'
-										cy='50%'
-										innerRadius={60}
-										outerRadius={80}
-										paddingAngle={5}
-										dataKey='value'
-									/>
-									<Tooltip content={<CustomTooltip />} />
-									<Legend />
-								</PieChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
-
-					{/* Peak Usage Times */}
-					<Card className='w-full'>
-						<CardHeader>
-							<CardTitle className='text-gray-900 dark:text-gray-100'>
-								Peak Usage Times
-							</CardTitle>
-						</CardHeader>
-						<CardContent className='h-[400px]'>
-							<ResponsiveContainer
-								width='100%'
-								height='100%'>
-								<RadialBarChart
-									cx='50%'
-									cy='50%'
-									innerRadius='20%'
-									outerRadius='80%'
-									data={peakUsageData}
-									startAngle={180}
-									endAngle={0}>
-									<RadialBar
-										minAngle={15}
-										background
-										clockWise={true}
-										dataKey='value'
-									/>
-									<Legend />
-									<Tooltip content={<CustomTooltip />} />
-								</RadialBarChart>
-							</ResponsiveContainer>
-						</CardContent>
-					</Card>
+					<EnergyDistribution distributionData={distributionData} />
+					<PeakUsage peakUsageData={peakUsageData} />
 				</div>
 			</ScrollArea>
 
 			{/* System Efficiency */}
-			<Card>
-				<CardHeader>
-					<CardTitle className='text-gray-900 dark:text-white'>
-						24-Hour System Efficiency
-					</CardTitle>
-				</CardHeader>
-				<CardContent className='h-[400px]'>
-					<ResponsiveContainer
-						width='100%'
-						height='100%'>
-						<AreaChart data={efficiencyData}>
-							<CartesianGrid
-								strokeDasharray='3 3'
-								stroke='#e5e7eb'
-							/>
-							<XAxis
-								dataKey='hour'
-								stroke='#4b5563'
-							/>
-							<YAxis stroke='#4b5563' />
-							<Tooltip content={<CustomTooltip />} />
-							<Area
-								type='monotone'
-								dataKey='efficiency'
-								stroke='#10b981'
-								fill='#d1fae5'
-								name='Efficiency %'
-							/>
-						</AreaChart>
-					</ResponsiveContainer>
-				</CardContent>
-			</Card>
+			<SystemEfficiency efficiencyData={efficiencyData} />
 		</div>
 	);
 };
