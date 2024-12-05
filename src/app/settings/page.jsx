@@ -121,10 +121,12 @@ const SettingsPage = () => {
 					if ('getNetworkInformation' in navigator) {
 						try {
 							const networkInfo = await navigator.getNetworkInformation();
-							details.ssid = networkInfo.ssid;
+							details.ssid = networkInfo.ssid || 'Connected'; // Use SSID if available, otherwise fallback
 						} catch (e) {
 							details.ssid = 'Connected'; // Fallback if SSID access denied
 						}
+					} else {
+						details.ssid = 'Connected'; // Fallback if API not available
 					}
 
 					setWifiDetails(details);
@@ -197,7 +199,7 @@ const SettingsPage = () => {
 									<div className='flex items-center gap-2'>
 										<Wifi className='w-5 h-5 text-blue-600 dark:text-blue-400' />
 										<h3 className='font-semibold text-gray-900 dark:text-gray-100'>
-											{wifiDetails.ssid}
+											{wifiDetails.ssid || 'Connected'}
 										</h3>
 									</div>
 									<div className='flex items-center gap-1'>
