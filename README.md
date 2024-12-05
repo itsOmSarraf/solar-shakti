@@ -1,93 +1,69 @@
-Solar Shakti ☀️
-
-Empowering homes with intelligent solar energy management
-
+Solar Shakti
+<div align="center">
+  <img src="https://raw.githubusercontent.com/itsOmSarraf/solar-shakti/refs/heads/main/public/icons/icon.png?token=GHSAT0AAAAAACZAJDMFHGVZY2LXQ6M3EKQEZ2SAHBQ" alt="Solar Shakti Logo" width="200"/>
+Smart Solar Energy Management System
 Show Image
-About Solar Shakti
-Solar Shakti is a revolutionary smart energy management platform that helps households and businesses maximize their solar energy investment. By intelligently managing energy consumption patterns and integrating with Time-of-Day (ToD) and Time-of-Use (ToU) electricity tariffs, we help users save money while contributing to a sustainable future.
-🌟 Key Features
-⚡ Smart Energy Optimization
+Show Image
+Show Image
+</div>
+Overview ⚡
+Solar Shakti optimizes your solar energy investment through intelligent management and real-time monitoring. Save money and contribute to a sustainable future with our smart platform.
+Key Features 🌟
+Smart Energy Management
 
-Real-time monitoring of energy consumption and solar production
-Automated energy usage optimization based on electricity tariffs
-Intelligent scheduling of high-power appliances during low-cost periods
-Seamless integration with smart home devices
+Real-time energy monitoring
+Automated usage optimization
+Intelligent appliance scheduling
+Smart home integration
 
-📊 Real-time Dashboard
+Interactive Dashboard
 
-Intuitive visualization of energy production and consumption
-Comprehensive analytics and savings insights
-Easy-to-understand metrics and performance indicators
-Track your carbon footprint reduction
+Live energy metrics
+Savings analytics
+Performance tracking
+Carbon footprint monitoring
 
-💰 Cost Savings
+Cost Optimization
 
-Automatic shifting of energy consumption to low-tariff periods
-Strategic use of stored solar energy during peak pricing
-Opportunities to sell excess energy back to the grid
-Detailed cost-benefit analysis and savings reports
+Dynamic tariff-based scheduling
+Strategic energy storage
+Grid export management
+Automated savings
 
-🤖 AI-Powered Intelligence
+AI Intelligence
 
-Machine learning algorithms for consumption pattern analysis
-Personalized recommendations for optimal energy usage
-Weather-aware solar production forecasting
-Smart scheduling based on historical data and user preferences
+Consumption pattern analysis
+Smart recommendations
+Weather-aware forecasting
+Automated scheduling
 
-📱 Seamless User Experience
+Why Solar Shakti? 🎯
+Traditional solar systems lack smart management, leading to inefficient usage and missed savings. Solar Shakti brings intelligence to solar energy management, making it simple and cost-effective.
+Our Edge 💪
 
-User-friendly mobile app interface
-Real-time alerts and notifications
-WhatsApp integration for daily reports and updates
-Automated appliance scheduling with manual override options
+Google Authentication
+Real-time monitoring
+Intuitive interface
+Mobile-first design
+Comprehensive control
+Smart notifications
+WhatsApp integration
 
-🎯 Problem We're Solving
-Traditional solar energy systems lack intelligent management capabilities, leading to:
-
-Inefficient energy usage during peak tariff periods
-Missed opportunities for cost savings
-Complex monitoring and management
-Limited control over energy consumption
-
-Solar Shakti addresses these challenges by providing:
-
-Automated energy optimization
-User-friendly monitoring
-Smart scheduling capabilities
-Intelligent forecasting and recommendations
-
-💪 Competitive Advantages
-What sets Solar Shakti apart:
-
-Seamless Google Authentication
-Real-time reporting and monitoring
-Intuitive charts and infographics
-Comprehensive control features
-Mobile-first approach
-Clean, modern UI
-Proactive alerts and notifications
-
-🌱 Impact
-Solar Shakti helps users:
-
-Reduce electricity bills
-Maximize solar investment returns
-Contribute to environmental sustainability
-Make informed energy decisions
-Automate energy management
-
-👥 Team
-Made with ❤️ by BeanBagCoders:
+Team 👥
+BeanBagCoders
 
 Om Sarraf - FullSnack Coder
 Naman - Trader who Codes
 Kartikey - UI Curator
 
-🔗 Links
+Quick Links 🔗
 
 Live Demo
-Download App
-Documentation
+GitHub Repository
+Report Issues
 
 
-Solar Shakti - Illuminating the path to sustainable energy management 🌞
+<div align="center">
+Made with ☀️ by BeanBagCoders
+Contact Us • Documentation • Privacy Policy
+</div>
