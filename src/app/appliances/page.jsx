@@ -46,9 +46,10 @@ import {
 	BatteryCharging,
 	BatteryFull,
 	Cloud,
-	CloudSun
+	CloudSun,
+	CircuitBoard
 } from 'lucide-react';
-
+import { GiSolarPower } from 'react-icons/gi';
 // Predefined smart schedules
 const schedules = {
 	ecoSaver: {
@@ -588,13 +589,13 @@ const SmartAppliancesPage = () => {
 
 const SolarSystemPage = () => {
 	const [solarPanels, setSolarPanels] = useState({
-		totalPanels: 24,
-		activePanels: 20,
+		totalPanels: 12,
+		activePanels: 8,
 		totalCapacity: 8.4,
 		currentGeneration: 6.2,
 		orientation: 180,
 		tilt: 30,
-		panels: Array(24).fill(true) // Track individual panel states
+		panels: Array(12).fill(true) // Track individual panel states
 	});
 
 	const [batterySystem, setBatterySystem] = useState({
@@ -606,7 +607,7 @@ const SolarSystemPage = () => {
 
 	const generateSolarData = () => {
 		const data = [];
-		for (let i = 0; i < 24; i++) {
+		for (let i = 0; i < 12; i++) {
 			const hour = i;
 			let production = 0;
 
@@ -685,7 +686,7 @@ const SolarSystemPage = () => {
 							: 'bg-gray-300 dark:bg-gray-600'
 					}`}>
 					<div className='w-full h-full flex items-center justify-center'>
-						<Sun
+						<GiSolarPower
 							className={`w-6 h-6 ${
 								active
 									? 'text-yellow-600 dark:text-yellow-200'
