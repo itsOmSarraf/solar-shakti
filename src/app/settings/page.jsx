@@ -33,6 +33,7 @@ import {
 	Activity
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { saveAs } from 'file-saver';
 
 // Settings Section Component
 const SettingsSection = ({ title, children }) => (
@@ -167,6 +168,37 @@ const SettingsPage = () => {
 		console.log('Clearing cache...');
 	};
 
+	const exportData = () => {
+		// Export data to CSV
+		const data = [
+			'points,timestamp,hour,day_of_week,month,is_weekend,is_holiday,temperature,cloud_cover,solar_irradiance,humidity,precipitation_prob,wind_speed,solar_generation,panel_temp,system_efficiency,battery_level,consumption,grid_ie,peak_flag,electricity_rate',
+			'1,2023-01-01 00:00:00,0,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'2,2023-01-01 01:00:00,1,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'3,2023-01-01 02:00:00,2,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'4,2023-01-01 03:00:00,3,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'5,2023-01-01 04:00:00,4,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'6,2023-01-01 05:00:00,5,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'7,2023-01-01 06:00:00,6,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'8,2023-01-01 07:00:00,7,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'9,2023-01-01 08:00:00,8,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'10,2023-01-01 09:00:00,9,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'11,2023-01-01 10:00:00,10,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'12,2023-01-01 11:00:00,11,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'13,2023-01-01 12:00:00,12,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'14,2023-01-01 13:00:00,13,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'15,2023-01-01 14:00:00,14,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'16,2023-01-01 15:00:00,15,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'17,2023-01-01 16:00:00,16,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'18,2023-01-01 17:00:00,17,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'19,2023-01-01 18:00:00,18,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5',
+			'2,2023-01-01 01:00:00,1,2,1,0,0,20,0,0,60,0,5,0,20,90,60,3,0,0,8.5'
+			// Add more data points here
+		];
+		const csv = data.join('\n');
+		const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+		saveAs(blob, 'solar_data.csv');
+	};
+
 	return (
 		<ScrollArea className='h-screen'>
 			<div className='pb-6'>
@@ -239,7 +271,15 @@ const SettingsPage = () => {
 						</Card>
 					</div>
 				)}
-
+				<div className='px-4'>
+					<Button
+						variant='primary'
+						className='w-full flex items-center gap-2'
+						onClick={exportData}>
+						<HardDrive className='w-4 h-4' />
+						Export Data
+					</Button>
+				</div>
 				{/* Notification Settings */}
 				<SettingsSection title='Notifications'>
 					<SettingsItem
@@ -379,6 +419,15 @@ const SettingsPage = () => {
 				</SettingsSection>
 
 				{/* Account Actions */}
+				<div className='px-4'>
+					<Button
+						variant='primary'
+						className='w-full flex items-center gap-2'
+						onClick={exportData}>
+						<HardDrive className='w-4 h-4' />
+						Export Data
+					</Button>
+				</div>
 				<div className='px-4'>
 					<Button
 						variant='destructive'
