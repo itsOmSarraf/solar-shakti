@@ -7,6 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
+} from '@/components/ui/dialog';
+import { HelpCircle, Phone, MessageCircle, Mail } from 'lucide-react';
+import {
 	Select,
 	SelectContent,
 	SelectItem,
@@ -55,7 +63,8 @@ const SettingsItem = ({
 }) => (
 	<Card
 		className='cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50'
-		onClick={onClick}>
+		onClick={onClick}
+	>
 		<CardContent className='p-4'>
 			<div className='flex items-center justify-between'>
 				<div className='flex items-center gap-3'>
@@ -73,6 +82,19 @@ const SettingsItem = ({
 	</Card>
 );
 
+const ContactCard = ({ icon: Icon, title, content, color }) => (
+	<Card className='p-4 flex items-start space-x-4 hover:shadow-lg transition-shadow duration-200'>
+		<div className={`p-2 rounded-full ${color}`}>
+			<Icon className='w-6 h-6 text-white' />
+		</div>
+		<div>
+			<h4 className='font-semibold text-gray-900 dark:text-gray-100'>
+				{title}
+			</h4>
+			<p className='text-gray-600 dark:text-gray-400'>{content}</p>
+		</div>
+	</Card>
+);
 const SettingsPage = () => {
 	const { theme, setTheme } = useTheme();
 	// State management for various settings
@@ -167,6 +189,26 @@ const SettingsPage = () => {
 		// Implement cache clearing logic
 		console.log('Clearing cache...');
 	};
+	const contactMethods = [
+		{
+			icon: Phone,
+			title: 'Phone | Luminous',
+			content: '9999933039\n9:00AM to 6:00PM',
+			color: 'bg-blue-500'
+		},
+		{
+			icon: MessageCircle,
+			title: 'Chat | Luminous',
+			content: '+91-7042833939',
+			color: 'bg-green-500'
+		},
+		{
+			icon: Mail,
+			title: 'Email | Luminous',
+			content: 'care@luminousindia.com',
+			color: 'bg-purple-500'
+		}
+	];
 
 	const exportData = () => {
 		// Export data to CSV
@@ -221,7 +263,16 @@ const SettingsPage = () => {
 						</div>
 					</div>
 				</div>
-
+				<div className='px-4'>
+					<Button
+						variant='primary'
+						className='w-full flex items-center gap-2'
+						onClick={exportData}
+					>
+						<HardDrive className='w-4 h-4' />
+						Export Data
+					</Button>
+				</div>
 				{/* WiFi Analysis Card */}
 				{wifiDetails && (
 					<div className='px-4 mb-6'>
@@ -271,20 +322,35 @@ const SettingsPage = () => {
 						</Card>
 					</div>
 				)}
-				<div className='px-4'>
-					<Button
-						variant='primary'
-						className='w-full flex items-center gap-2'
-						onClick={exportData}>
-						<HardDrive className='w-4 h-4' />
-						Export Data
-					</Button>
-				</div>
+				<Dialog>
+					<DialogTrigger asChild>
+						<div className='text-center'>
+							<p>Help & Support</p>
+						</div>
+					</DialogTrigger>
+					<DialogContent className='sm:max-w-md'>
+						<DialogHeader>
+							<DialogTitle className='flex items-center gap-2'>
+								<HelpCircle className='w-5 h-5' />
+								Help & Support
+							</DialogTitle>
+						</DialogHeader>
+						<div className='mt-4'>
+							<p className='text-gray-600 dark:text-gray-400 mb-6'>
+								Facing trouble using our product? You could reach out to us
+								through any of these channels:
+							</p>
+							<div className='space-y-4'>
+								{contactMethods.map((method, index) => (
+									<ContactCard key={index} {...method} />
+								))}
+							</div>
+						</div>
+					</DialogContent>
+				</Dialog>
 				{/* Notification Settings */}
 				<SettingsSection title='Notifications'>
-					<SettingsItem
-						icon={Bell}
-						label='Push Notifications'>
+					<SettingsItem icon={Bell} label='Push Notifications'>
 						<Switch
 							checked={notifications.push}
 							onCheckedChange={(checked) =>
@@ -292,9 +358,7 @@ const SettingsPage = () => {
 							}
 						/>
 					</SettingsItem>
-					<SettingsItem
-						icon={Zap}
-						label='Usage Alerts'>
+					<SettingsItem icon={Zap} label='Usage Alerts'>
 						<Switch
 							checked={notifications.usageAlerts}
 							onCheckedChange={(checked) =>
@@ -302,9 +366,7 @@ const SettingsPage = () => {
 							}
 						/>
 					</SettingsItem>
-					<SettingsItem
-						icon={DollarSign}
-						label='Savings Reports'>
+					<SettingsItem icon={DollarSign} label='Savings Reports'>
 						<Switch
 							checked={notifications.savingsReport}
 							onCheckedChange={(checked) =>
@@ -316,12 +378,9 @@ const SettingsPage = () => {
 						/>
 					</SettingsItem>
 				</SettingsSection>
-
 				{/* Energy Preferences */}
 				<SettingsSection title='Energy Management'>
-					<SettingsItem
-						icon={Sun}
-						label='Solar Priority Mode'>
+					<SettingsItem icon={Sun} label='Solar Priority Mode'>
 						<Switch
 							checked={energy.solarPriority}
 							onCheckedChange={(checked) =>
@@ -329,14 +388,13 @@ const SettingsPage = () => {
 							}
 						/>
 					</SettingsItem>
-					<SettingsItem
-						icon={Battery}
-						label='Battery Limit'>
+					<SettingsItem icon={Battery} label='Battery Limit'>
 						<Select
 							value={energy.batteryLimit}
 							onValueChange={(value) =>
 								setEnergy((prev) => ({ ...prev, batteryLimit: value }))
-							}>
+							}
+						>
 							<SelectTrigger className='w-24'>
 								<SelectValue placeholder='Select' />
 							</SelectTrigger>
@@ -348,9 +406,7 @@ const SettingsPage = () => {
 							</SelectContent>
 						</Select>
 					</SettingsItem>
-					<SettingsItem
-						icon={Zap}
-						label='Grid Backup'>
+					<SettingsItem icon={Zap} label='Grid Backup'>
 						<Switch
 							checked={energy.gridBackup}
 							onCheckedChange={(checked) =>
@@ -359,12 +415,9 @@ const SettingsPage = () => {
 						/>
 					</SettingsItem>
 				</SettingsSection>
-
 				{/* App Preferences */}
 				<SettingsSection title='App Preferences'>
-					<SettingsItem
-						icon={Moon}
-						label='Dark Mode'>
+					<SettingsItem icon={Moon} label='Dark Mode'>
 						<Switch
 							checked={theme === 'dark'}
 							onCheckedChange={(checked) =>
@@ -372,14 +425,13 @@ const SettingsPage = () => {
 							}
 						/>
 					</SettingsItem>
-					<SettingsItem
-						icon={Languages}
-						label='Language'>
+					<SettingsItem icon={Languages} label='Language'>
 						<Select
 							value={preferences.language}
 							onValueChange={(value) =>
 								setPreferences((prev) => ({ ...prev, language: value }))
-							}>
+							}
+						>
 							<SelectTrigger className='w-24'>
 								<SelectValue placeholder='Select' />
 							</SelectTrigger>
@@ -390,9 +442,7 @@ const SettingsPage = () => {
 							</SelectContent>
 						</Select>
 					</SettingsItem>
-					<SettingsItem
-						icon={Wifi}
-						label='Offline Mode'>
+					<SettingsItem icon={Wifi} label='Offline Mode'>
 						<Switch
 							checked={preferences.offlineMode}
 							onCheckedChange={(checked) =>
@@ -401,7 +451,6 @@ const SettingsPage = () => {
 						/>
 					</SettingsItem>
 				</SettingsSection>
-
 				{/* Data & Security */}
 				<SettingsSection title='Data & Security'>
 					<SettingsItem
@@ -417,13 +466,13 @@ const SettingsPage = () => {
 						showArrow
 					/>
 				</SettingsSection>
-
 				{/* Account Actions */}
 				<div className='px-4'>
 					<Button
 						variant='primary'
 						className='w-full flex items-center gap-2'
-						onClick={exportData}>
+						onClick={exportData}
+					>
 						<HardDrive className='w-4 h-4' />
 						Export Data
 					</Button>
@@ -432,7 +481,8 @@ const SettingsPage = () => {
 					<Button
 						variant='destructive'
 						className='w-full flex items-center gap-2'
-						onClick={handleLogout}>
+						onClick={handleLogout}
+					>
 						<LogOut className='w-4 h-4' />
 						Log Out
 					</Button>
