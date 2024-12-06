@@ -701,55 +701,81 @@ const SolarSystemPage = () => {
 
 	const batteryPercentage =
 		(batterySystem.currentCharge / batterySystem.capacity) * 100;
+	const BatteryStatus = () => {
+		// State for battery percentage and system mode
+		const [batteryPercentage, setBatteryPercentage] = useState(75);
+		const [batterySystem, setBatterySystem] = useState({
+			mode: 'battery', // 'battery' or 'grid'
+			isCharging: false
+		});
 
-	const BatteryStatus = () => (
-		<Card className='p-4'>
-			<div className='flex items-center justify-between mb-4'>
-				<h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
-					Battery Status
-				</h3>
-				<Badge
-					variant={batteryPercentage > 50 ? 'default' : 'destructive'}
-					className='animate-pulse'>
-					{batteryPercentage.toFixed(1)}%
-				</Badge>
-			</div>
-			<div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4'>
-				<div
-					className='bg-green-500 dark:bg-green-400 rounded-full h-4 transition-all duration-500 animate-pulse'
-					style={{ width: `${batteryPercentage}%` }}
-				/>
-			</div>
-			{/* <div className='grid grid-cols-3 gap-2'>
-				{BATTERY_MODES.map((mode) => (
-					<Button
-						key={mode.value}
-						variant={batterySystem.mode === mode.value ? 'default' : 'outline'}
-						className='flex items-center justify-center gap-1 p-2'
-						onClick={() => {
-							console.log('Setting mode to:', mode.value);
-							setBatterySystem((prev) => {
-								const newState = {
-									...prev,
-									mode: mode.value,
-									currentCharge:
-										mode.value === 'charging'
-											? Math.min(prev.currentCharge + 20, prev.capacity)
-											: mode.value === 'discharging'
-											? Math.max(prev.currentCharge - 20, 0)
-											: prev.currentCharge
-								};
-								console.log('New battery state:', newState);
-								return newState;
-							});
-						}}>
-						{mode.icon}
-						<span className='text-xs hidden sm:inline'>{mode.name}</span>
-					</Button>
-				))}
-			</div> */}
-		</Card>
-	);
+		// Simulate battery percentage changes based on mode
+		useEffect(() => {
+			const interval = setInterval(() => {
+				setBatteryPercentage((prevPercentage) => {
+					if (batterySystem.mode === 'battery') {
+						// When storing in battery, increase percentage
+						return prevPercentage < 100 ? prevPercentage + 0.5 : prevPercentage;
+					} else {
+						// When selling to grid, decrease percentage
+						return prevPercentage > 0 ? prevPercentage - 0.5 : prevPercentage;
+					}
+				});
+			}, 1000); // Update every second
+
+			return () => clearInterval(interval);
+		}, [batterySystem.mode]);
+
+		// Get the appropriate badge variant based on battery percentage
+		const getBadgeVariant = (percentage) => {
+			if (percentage > 50) return 'default';
+			if (percentage > 20) return 'warning';
+			return 'destructive';
+		};
+
+		return (
+			<Card className='p-4'>
+				<div className='flex items-center justify-between mb-4'>
+					<h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+						Battery Status
+					</h3>
+					<Badge
+						variant={getBadgeVariant(batteryPercentage)}
+						className='animate-pulse'>
+						{batteryPercentage.toFixed(1)}%
+					</Badge>
+				</div>
+
+				<div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4'>
+					<div
+						className={`${
+							batterySystem.mode === 'battery'
+								? 'bg-green-500 dark:bg-green-400'
+								: 'bg-blue-500 dark:bg-blue-400'
+						} rounded-full h-4 transition-all duration-500 animate-pulse`}
+						style={{ width: `${batteryPercentage}%` }}
+					/>
+				</div>
+
+				<div className='flex flex-col items-center gap-2'>
+					<Switch
+						checked={batterySystem.mode === 'grid'}
+						onCheckedChange={(checked) => {
+							setBatterySystem((prev) => ({
+								...prev,
+								mode: checked ? 'grid' : 'battery'
+							}));
+						}}
+					/>
+					<span className='text-sm text-gray-600 dark:text-gray-400'>
+						{batterySystem.mode === 'grid'
+							? 'Selling to Grid'
+							: 'Storing in Battery'}
+					</span>
+				</div>
+			</Card>
+		);
+	};
 
 	return (
 		<div className='space-y-4 p-4'>
@@ -759,13 +785,13 @@ const SolarSystemPage = () => {
 						<h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
 							Solar Array
 						</h3>
-						<Button
+						{/* <Button
 							variant='outline'
 							className='flex items-center gap-2'
 							onClick={rotateToSun}>
 							<RotateCw className='w-4 h-4' />
 							<span className='hidden sm:inline'>Align to Sun</span>
-						</Button>
+						</Button> */}
 					</div>
 					<SolarPanelGrid />
 					<div className='grid grid-cols-2 gap-4 mt-4'>
