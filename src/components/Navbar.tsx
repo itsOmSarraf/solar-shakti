@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { APP_NAME } from '@/lib/constants'
 import { WeatherWidget } from "./WeatherWidget"
-import Logo from "@/public/opengraph-image.png"
+import { AiOutlineRobot } from 'react-icons/ai'
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -37,20 +36,23 @@ export function Navbar() {
                     href='/'
                     className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                 >
-                    <Image
-                        src={Logo}
-                        alt={APP_NAME}
-                        className="size-8 rounded-lg"
-                        priority
-                        width={32}
-                        height={32}
-                    />
                     <span className="font-semibold text-xl tracking-tight text-gray-900 dark:text-gray-100">
                         {APP_NAME}
                     </span>
                 </Link>
 
-                <WeatherWidget />
+                <div className="flex items-center space-x-4">
+                    <WeatherWidget />
+                    <Link
+                        href='/chatbot'
+                        className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                    >
+                        <AiOutlineRobot size={24} className="text-gray-900 dark:text-gray-100" />
+                        <span className="font-semibold text-lg tracking-tight text-gray-900 dark:text-gray-100">
+                            ShaktiBot
+                        </span>
+                    </Link>
+                </div>
             </div>
         </nav>
     )
